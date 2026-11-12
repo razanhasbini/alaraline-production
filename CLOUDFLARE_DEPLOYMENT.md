@@ -89,6 +89,41 @@ for each photo at the size it is shown, and after the move points old `alaraline
 `NEXT_PUBLIC_WC_URL`. `src/app/wp-content/[...path]` forwards old file links to `WC_URL` (307) only when WordPress
 is on a different address than the site (no loop today).
 
+Note: vinext's `<Image fill>` writes `object-fit: cover` (and, for sized images, the photo's own `aspect-ratio`)
+as an inline style. CSS that needs `contain` or a fixed frame on such images must use `!important`.
+
+## Launch: WordPress → shop.alaraline.co, alaraline.co → this site
+
+One WordPress install and one database, moved by address only (never copied). Full runbook with approvals and
+rollback: shared separately. What is ready in this repo:
+
+| Ready | Where |
+|---|---|
+| Old WordPress addresses → real pages or home (`/sitemap_index.xml`, demo pages, demo blog, tags…) | `next.config.ts` redirects |
+| `/wp-admin`, `/wp-login.php` → WordPress's own address, `?query` kept; 404 while WC_URL is alaraline.co | `src/proxy.ts` |
+| Old `alaraline.co/wp-content/...` file links → WordPress (307) | `src/app/wp-content/[...path]` |
+| Public address `domains: ["alaraline.co"]` | branch `launch/cutover-domains` (local, unmerged: merge at cutover) |
+| WordPress side: old theme pages on shop.alaraline.co → same address on alaraline.co (301) + `noindex` | `alaraline/wp-plugins/alara-storefront-redirect/` (upload to `wp-content/mu-plugins/`) |
+
+Cutover order (each step approved by the owner):
+1. Hostinger CDN off for alaraline.co and shop; Cloudflare zone active with records identical to Hostinger's,
+   all **DNS only** (MX mx1/mx2.hostinger.com, SPF, DKIM hostingermail-a/b/c CNAMEs, DMARC, autodiscover/autoconfig).
+2. Fresh backups (hPanel + `wp db export`); export the Cloudflare DNS zone.
+3. shop.alaraline.co serves the existing install; `wp option update home|siteurl https://shop.alaraline.co`;
+   `wp search-replace 'https://alaraline.co/wp-content/' 'https://shop.alaraline.co/wp-content/' --all-tables-with-prefix --skip-columns=guid --dry-run`
+   then without `--dry-run`. Do **not** replace the whole domain (links in product text must keep pointing here).
+   `wp-config.php`: `ALARA_HL_STOREFRONT=https://alaraline.co`, `ALARA_HL_ORIGINS` = alaraline.co, www, workers.dev.
+   Upload the mu-plugin; flush caches; accept Jetpack's "move connection".
+4. Secret `WC_URL` and build variable `NEXT_PUBLIC_WC_URL` = `https://shop.alaraline.co`; rebuild; test on workers.dev.
+5. Delete the alaraline.co A/AAAA records; push + merge `launch/cutover-domains` (or add the custom domain in the
+   dashboard, then merge). `www`: proxied CNAME → alaraline.co + Redirect Rule `www.alaraline.co/*` →
+   `https://alaraline.co/${1}` (301, keep query string).
+6. Smoke test + one cash-on-delivery order (cancel it); submit `https://alaraline.co/sitemap.xml` in Search Console.
+
+Rollback: detach the custom domain, restore the exported DNS records, set `home`/`siteurl` back to
+`https://alaraline.co` (move files back if they were moved). Never restore the database backup unless the database
+itself is damaged: it would delete the orders placed since.
+
 ## Free-tier check (measured on the build)
 
 Server code ~0.72 MB gzipped (limit 3 MB). Largest server chunk: the three.js hero (618 KB raw).
