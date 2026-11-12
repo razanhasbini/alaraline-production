@@ -56,7 +56,7 @@ Locally put them in `.dev.vars` (gitignored; same format as `.env`). The app rea
 | `WC_ADMIN_KEY` / `WC_ADMIN_SECRET` | WooCommerce REST key, **Read/Write** (admin panel) |
 | `ADMIN_SESSION_SECRET` | random 32+ characters (`openssl rand -base64 36`) |
 | `ADMIN_USERS` | output of `node scripts/admin-user.mjs <user> <password> [Name]` (choose a strong password) |
-| `ALLOW_LIVE_CHECKOUT` | **leave unset**. Set to `1` only when the owner decides to take real orders on the new site |
+| `ALLOW_LIVE_CHECKOUT` | Ordering switch. Not set = orders blocked. `1` = real orders (Secret, so deploys keep it) |
 
 Build-time variable (Settings → Build → Variables): `NEXT_PUBLIC_WC_URL` = same as `WC_URL`. Used for photo links
 and two outbound links; defaults to `https://alaraline.co`.

@@ -5,9 +5,7 @@ import { bindings, defineConfig, defineWorker } from "cf/config";
 // Settings are declared as Secrets: locally their values come from `.dev.vars` (never committed); on Cloudflare
 // they are entered in the dashboard (Workers & Pages → alaraline-frontend → Settings → Variables and Secrets).
 // Inside the app they are read as `process.env.NAME`, exactly as in standard Next.js.
-// Optional settings are left out of the list on purpose (when missing they are simply off):
-//   ALLOW_LIVE_CHECKOUT  — must stay unset until the owner decides to take real orders (then set to "1").
-//   ALARA_SNAPSHOTS      — local preview only.
+// ALARA_SNAPSHOTS (local preview only) is left out of the list on purpose.
 // See CLOUDFLARE_DEPLOYMENT.md.
 export default defineConfig({
   worker: defineWorker({
@@ -38,6 +36,8 @@ export default defineConfig({
       // Admin panel sign-in: cookie encryption secret + users (`node scripts/admin-user.mjs <user> <password> [Name]`)
       ADMIN_SESSION_SECRET: bindings.secret(),
       ADMIN_USERS: bindings.secret(),
+      // Ordering switch. Not set (or anything but "1") = orders are blocked. "1" = real orders go to WooCommerce.
+      ALLOW_LIVE_CHECKOUT: bindings.secret(),
     },
   }),
 });
