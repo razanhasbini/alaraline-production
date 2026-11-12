@@ -14,6 +14,8 @@ export default defineConfig({
     name: "alaraline-frontend",
     entrypoint: "vinext/server/fetch-handler",
     compatibilityDate: "2026-11-12",
+    workersDev: true,
+    previewUrls: true,
     assets: {
       htmlHandling: "none",
       notFoundHandling: "none",
@@ -22,11 +24,10 @@ export default defineConfig({
     env: {
       ASSETS: bindings.assets(),
       // Persistent data cache required by vinext for Next.js `use cache` / Cache Components.
-      // `cf deploy` provisions the namespace when it is missing; it is not a secret.
-    // Reuse the existing KV namespace instead of creating a duplicate.
-VINEXT_KV_CACHE: bindings.kv({
-  id: "e98aa8716d7c414ca5030ded1578f2db",
-}),
+      // Reuse the existing KV namespace instead of creating a duplicate; it is not a secret.
+      VINEXT_KV_CACHE: bindings.kv({
+        id: "e98aa8716d7c414ca5030ded1578f2db",
+      }),
       WC_URL: bindings.secret(),
       // WooCommerce REST key, Read permission (product tabs, "New" badge dates)
       WC_CONSUMER_KEY: bindings.secret(),
