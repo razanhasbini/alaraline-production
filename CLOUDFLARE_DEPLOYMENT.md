@@ -15,6 +15,35 @@ beta). The standard Next.js commands still work unchanged.
 Config: `cloudflare.config.ts` (Worker `alaraline-frontend`, settings), `vite.config.ts`. There is no `wrangler.jsonc`
 on purpose: `npx wrangler deploy` cannot deploy this project.
 
+## Persistent catalog cache (Workers KV)
+
+The app uses Next.js Cache Components (`use cache`) for public WooCommerce catalog/content reads. Production vinext
+deployments therefore require a persistent data-cache adapter. `vite.config.ts` uses vinext's official
+`kvDataAdapter()`, and `cloudflare.config.ts` declares its required `VINEXT_KV_CACHE` Workers KV binding.
+
+[`cf deploy` provisions missing binding resources](https://developers.cloudflare.com/cf/projects/#deploy)
+automatically because `bindings.kv()` intentionally omits a namespace ID. No dashboard namespace or ID is normally
+required. The Workers Builds API token must retain **Workers KV Storage: Edit** permission; the
+[standard token Cloudflare creates for Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/#api-token)
+includes it. If provisioning is denied, fix that token permission and retry instead of adding credentials to Git.
+
+KV contains only the serialized output of the public cached functions in `src/lib/woo.ts` and `src/lib/alara.ts`:
+products, categories, public product tabs/reviews, bundles, Results Wall and packaging display data. Cart, checkout,
+accounts, orders, forms and admin calls do not use `use cache`; their backend requests use `cache: 'no-store'` where
+applicable, and their cookies/tokens are never stored in KV. Catalog entries use `cacheLife('hours')` (5-minute client
+stale time, hourly background revalidation, one-day hard expiry) and the custom admin panel invalidates matching tags
+immediately after catalog/content edits. Edits made directly in wp-admin can remain cached until the hourly
+revalidation; add the planned authenticated invalidation webhook before requiring immediate wp-admin-to-storefront
+updates.
+
+As of 12 November 2026, the official [Workers KV pricing](https://developers.cloudflare.com/kv/platform/pricing/) and
+[limits](https://developers.cloudflare.com/kv/platform/limits/) show that the Free plan includes 100,000 key reads/day,
+1,000 key writes/day, 1,000 deletes/day, 1,000 list operations/day and 1 GB stored data. Limits reset at 00:00 UTC;
+after a type of operation reaches its daily limit, further operations of that type fail rather than silently becoming
+paid usage. This storefront's hour-long catalog revalidation is intended to keep writes modest, but suitability still
+depends on real traffic and the number of distinct products/filter combinations requested. Monitor Workers KV usage
+during preview and after launch; do not enable a paid plan without owner approval.
+
 ## Settings (Secrets)
 
 Set these as **Secrets** in Cloudflare: Workers & Pages → alaraline-frontend → Settings → Variables and Secrets.
@@ -40,7 +69,8 @@ Never put keys in Git or chat. Revoke the WooCommerce key and Application Passwo
 2. Project name: `alaraline-frontend` (must match `cloudflare.config.ts`). Branch: `main`.
 3. Build settings: **Build command: leave empty.** **Deploy command: `npm run deploy:vinext`.**
    Root directory: `/`. Build variable `NEXT_PUBLIC_WC_URL=https://alaraline.co`.
-4. Deploy. Then add the Secrets above (with `WC_URL=https://alaraline.co`, `ALLOW_LIVE_CHECKOUT` unset) and redeploy.
+4. Deploy. The first successful deploy provisions the `VINEXT_KV_CACHE` namespace automatically. Then add the Secrets
+   above (with `WC_URL=https://alaraline.co`, `ALLOW_LIVE_CHECKOUT` unset) and redeploy.
 5. In WordPress wp-config.php add the workers.dev address to `ALARA_HL_ORIGINS` (comma-separated).
 6. Check on the `*.workers.dev` address: home, shop, a product, bundles, Results Wall, `/admin` sign-in.
    Checkout shows the "Test mode" message; that is intended.

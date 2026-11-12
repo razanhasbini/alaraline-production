@@ -21,6 +21,9 @@ export default defineConfig({
     },
     env: {
       ASSETS: bindings.assets(),
+      // Persistent data cache required by vinext for Next.js `use cache` / Cache Components.
+      // `cf deploy` provisions the namespace when it is missing; it is not a secret.
+      VINEXT_KV_CACHE: bindings.kv(),
       // WordPress + WooCommerce backend (https://alaraline.co for previews, later https://shop.alaraline.co)
       WC_URL: bindings.secret(),
       // WooCommerce REST key, Read permission (product tabs, "New" badge dates)
