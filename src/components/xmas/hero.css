@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Christmas hero: a short film of the ÀLara PR box on burgundy. Same height and type as the live hero
+   (Butler headline with a PT Serif italic accent, small spaced capitals on the button).
+   ========================================================================== */
+.xh {
+  --xh-bg: #4a0c1f;
+  --xh-ivory: #fbf1ea;
+  --xh-champagne: #ecd9b4;
+  --xh-blush: #f4b6cf;
+  --xh-ease: cubic-bezier(.22, 1, .36, 1);
+  position: relative; height: 760px; overflow: hidden; background: var(--xh-bg); color: var(--xh-ivory);
+  font: 400 16px/1.65 var(--font-sans);
+}
+.xh :focus-visible { outline: 2px solid var(--xh-champagne); outline-offset: 4px; }
+.xh-stage { position: absolute; inset: 0; }
+.xh-canvas { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity .5s ease; }
+.xh.is-ready .xh-canvas { opacity: 1; }
+.xh-fallback { position: absolute; right: 12%; top: 50%; width: 420px; height: auto; transform: translateY(-50%); }
+
+/* product names, placed under each product by the scene */
+.xh-tags { position: absolute; inset: 0; pointer-events: none; }
+.xh-tag { position: absolute; left: 0; top: 0; padding: 6px 12px; background: rgba(61, 11, 27, .72); color: var(--xh-champagne); white-space: nowrap;
+  font: italic 400 14px/1.2 var(--font-serif); opacity: 0; transition: opacity .5s ease, background .3s, color .3s; }
+.xh-tag.is-on { opacity: 1; }
+.xh-tag.is-hot { background: var(--xh-ivory); color: #3d0b1b; }
+
+/* the words follow the film: the box's name while it turns, its own line once it opens */
+.xh-copy { position: absolute; left: 8%; top: 50%; z-index: 2; width: min(500px, 36%); transform: translateY(-50%); }
+.xh-words-wrap { position: relative; height: 330px; }
+.xh-words { position: absolute; left: 0; right: 0; bottom: 0; transition: opacity .8s ease, transform 1s var(--xh-ease), visibility 1s; }
+.xh-words-inside { opacity: 0; visibility: hidden; transform: translateY(24px); }
+.xh.is-inside .xh-words:not(.xh-words-inside) { opacity: 0; visibility: hidden; transform: translateY(-24px); }
+.xh.is-inside .xh-words-inside { opacity: 1; visibility: visible; transform: none; transition-delay: .4s; }
+
+.xh-head { font: 400 62px/1.04 var(--font-display); letter-spacing: -.01em; color: var(--xh-ivory); }
+.xh-head em { font-family: var(--font-serif); font-style: italic; color: var(--xh-blush); }
+.xh-text { margin-top: 24px; max-width: 34ch; font-size: 17px; color: rgba(251, 241, 234, .86); }
+.xh-list { margin-top: 20px; font: italic 400 19px/1.75 var(--font-serif); color: rgba(236, 217, 180, .55); }
+.xh-list li { transition: color .4s, transform .4s var(--xh-ease); }
+.xh-list li.is-active { color: var(--xh-champagne); transform: translateX(10px); }
+.xh-actions { display: flex; align-items: center; gap: 26px; margin-top: 34px; }
+.xh-btn { display: inline-flex; align-items: center; gap: 14px; height: 51px; padding: 0 28px; background: var(--xh-champagne); color: #3d0b1b;
+  font: 700 12px/1 var(--font-sans); letter-spacing: 2.4px; text-transform: uppercase; transition: background .3s, transform .2s var(--xh-ease); }
+.xh-btn:hover { background: #fff; }
+.xh-btn:active { transform: scale(.97); }
+.xh-btn span { transition: transform .3s var(--xh-ease); }
+.xh-btn:hover span { transform: translateX(4px); }
+.xh-link { color: var(--xh-ivory); font-size: 14px; text-decoration: underline; text-underline-offset: 6px; text-decoration-color: rgba(251, 241, 234, .45); transition: text-decoration-color .2s; }
+.xh-link:hover { text-decoration-color: var(--xh-champagne); }
+.xh-link:disabled { opacity: .5; }
+
+@media (max-width: 1080px) {
+  .xh { height: 680px; }
+  .xh-head { font-size: 46px; }
+  .xh-copy { left: 6%; width: 40%; }
+  .xh-words-wrap { height: 300px; }
+}
+
+/* phones: the words on top, the film below */
+@media (max-width: 760px) {
+  .xh { height: 820px; }
+  .xh-stage { top: 230px; }
+  .xh-copy { left: 20px; right: 20px; top: 36px; width: auto; transform: none; }
+  .xh-words-wrap { height: 160px; }
+  .xh-head { font-size: 34px; }
+  .xh-text { margin-top: 12px; font-size: 15px; }
+  .xh-list { margin-top: 8px; font-size: 14px; line-height: 1.5; columns: 2; column-gap: 16px; }
+  .xh-actions { margin-top: 18px; }
+  .xh-tags { display: none; }   /* the list above names them on a phone */
+  .xh-fallback { right: 50%; width: 240px; transform: translate(50%, -50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xh *, .xh *::before, .xh *::after { transition-duration: .01ms !important; transition-delay: 0s !important; }
+}

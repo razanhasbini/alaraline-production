@@ -1,0 +1,261 @@
+{
+ "enabled": true,
+ "currency": "USD",
+ "currency_symbol": "$",
+ "items": [
+  {
+   "slot": 0,
+   "id": 6767,
+   "name": "The All-In Set",
+   "slug": "the-all-in-set",
+   "type": "variable",
+   "image": {
+    "src": "https://alaraline.co/wp-content/uploads/2025/01/IMG_1101.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   },
+   "details": "THE All In SET\n\nThis Set Includes:\n– Hydra Gloss Repair Shampoo (500 mL): 100% natural ingredients, contains active ingredients like Pro-Vitamins & Peptides.  \n– Intense Hydration Conditioner (500 mL): 100% natural ingredients, helps soften hair smoothly during the shower.\n– Leave-In Hair Cream (250 mL): Frizz Control, gives a glossy finish and helps detangling hair easily.\n– The Miracle Pro-Edition (100 mL): Hair Growth Booster, Water-Based Products infused with Vitamins, Peptides & Caffeine, Reduces hair fall within 10 days, with noticeable baby hair growth in 15–20 days.\n\n– Buttered Up Mask (250 mL): deep hydration from first use, contains Mango butter, Shea butter, Avocado butter & Honey.       \n-Heat Protectant (100 mL): Protects hair from heat up to 450°F, UV rays, and sun exposure while keeping it smooth, shiny, and healthy.\n–Hair Mist (50 mL): Alcohol-free, Vitamin E-enriched hair mist that leaves your hair with a long-lasting, irresistible fragrance.\n–Deep Repair Capsules (25 capsules): Enriched with natural oils, vitamins, and peptides to deeply nourish, smooth, repair, and add glossy keratin-like shine.",
+   "price": "140.00",
+   "max_price": null,
+   "regular_price": "197.00",
+   "on_sale": true,
+   "in_stock": true,
+   "purchasable": true,
+   "choices": [
+    {
+     "key": "attribute_scent",
+     "label": "Shampoo/conditioner scent",
+     "options": [
+      "Pure Honey",
+      "Tropical Vanilla"
+     ]
+    },
+    {
+     "key": "attribute_hair-mist",
+     "label": "Hair mist scent",
+     "options": [
+      "Pure Honey",
+      "Tropical Vanilla",
+      "Wild Berries",
+      "Coconut Milk"
+     ]
+    }
+   ],
+   "image2": {
+    "src": "https://alaraline.co/wp-content/uploads/2025/03/IMG_1228.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   }
+  },
+  {
+   "slot": 1,
+   "id": 6740,
+   "name": "The Curl Essentials Pouch",
+   "slug": "the-curl-essentials-pouch",
+   "type": "simple",
+   "image": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_1075-1.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   },
+   "details": "This Pouch Includes:\n- Curl Boosting Cream (500 mL): The star of the Curls On collection, a curling cream that enhances definition, shape, and bounce while controlling frizz and leaving curls soft, shiny, and beautifully defined without weighing them down.\n-Curly Brush: Designed to gently detangle curls, minimize breakage, and help define beautiful, bouncy curls.\n\n-Special Pouch: A stylish and practical pouch to keep your curly hair essentials organized and ready to go.",
+   "price": "50.00",
+   "max_price": null,
+   "regular_price": "56.00",
+   "on_sale": true,
+   "in_stock": true,
+   "purchasable": true,
+   "choices": [],
+   "image2": {
+    "src": "https://alaraline.co/wp-content/uploads/2025/03/IMG_1222.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   }
+  },
+  {
+   "slot": 2,
+   "id": 3947,
+   "name": "Full Treatment Set",
+   "slug": "full-treatment-set",
+   "type": "variable",
+   "image": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_0605-scaled.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   },
+   "details": "FULL TREATMENT SET\n\nThis Set Includes:\n– Hydra Gloss Repair Shampoo (500 mL): 100% natural ingredients, contains active ingredients like Pro-Vitamins & Peptides.\n– Intense Hydration Conditioner (500 mL): 100% natural ingredients, helps soften hair smoothly during the shower.\n– Leave-In Hair Cream (250 mL): Frizz Control, gives a glossy finish and helps detangling hair easily.\n– The Miracle Pro-Edition (100 mL): Hair Growth Booster, Water-Based Products infused with Vitamins, Peptides & Caffeine, Reduces hair fall within 10 days, with noticeable baby hair growth in 15–20 days.\n– Buttered Up Mask (250 mL): deep hydration from first use, contains Mango butter, Shea butter, Avocado butter & Honey.",
+   "price": "88.00",
+   "max_price": null,
+   "regular_price": "122.00",
+   "on_sale": true,
+   "in_stock": true,
+   "purchasable": true,
+   "choices": [
+    {
+     "key": "attribute_scent",
+     "label": "Shampoo/conditioner scent",
+     "options": [
+      "Pure Honey",
+      "Tropical Vanilla"
+     ]
+    }
+   ],
+   "image2": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_1083-1.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   }
+  },
+  {
+   "slot": 3,
+   "id": 6769,
+   "name": "The Hair Growth Essentials",
+   "slug": "the-hair-growth-essentials",
+   "type": "variable",
+   "image": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_0619-scaled.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   },
+   "details": "The Hair Growth Essentials SET\n\nThis Set Includes:\n– Hydra Gloss Repair Shampoo (500 mL): 100% natural ingredients, contains active ingredients like Pro-Vitamins & Peptides.\n– The Miracle Pro-Edition (100 mL): Hair Growth Booster, Water-Based Products infused with Vitamins, Peptides & Caffeine, Reduces hair fall within 10 days, with noticeable baby hair growth in 15–20 days.",
+   "price": "50.00",
+   "max_price": null,
+   "regular_price": "56.00",
+   "on_sale": true,
+   "in_stock": true,
+   "purchasable": true,
+   "choices": [
+    {
+     "key": "attribute_scent",
+     "label": "Shampoo scent",
+     "options": [
+      "Pure Honey",
+      "Tropical Vanilla"
+     ]
+    }
+   ],
+   "image2": {
+    "src": "https://alaraline.co/wp-content/uploads/2025/03/IMG_1227.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   }
+  },
+  {
+   "slot": 4,
+   "id": 4214,
+   "name": "Deep Repair Duo",
+   "slug": "deep-repair-duo",
+   "type": "simple",
+   "image": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_0620-2-scaled.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   },
+   "details": "Deep Repair Duo\n\nThis Set Includes:\n– The Miracle Pro-Edition (100 mL): Hair Growth Booster, Water-Based Products infused with Vitamins, Peptides & Caffeine, Reduces hair fall within 10 days, with noticeable baby hair growth in 15–20 days.\n– Buttered Up Mask (250 mL): deep hydration from first use, contains Mango butter, Shea butter, Avocado butter & Honey.",
+   "price": "53.00",
+   "max_price": null,
+   "regular_price": "60.00",
+   "on_sale": true,
+   "in_stock": true,
+   "purchasable": true,
+   "choices": [],
+   "image2": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_1109.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   }
+  },
+  {
+   "slot": 5,
+   "id": 6166,
+   "name": "Curls On Care Kit",
+   "slug": "curls-on-care-kit",
+   "type": "simple",
+   "image": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_0617-1-scaled.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   },
+   "details": "Curls On Care Kit:\nThis set includes\n– Curl Defining Shampoo (500 mL): A hydrating, berry-infused shampoo that deeply cleanses, nourishes, and enhances curl definition while leaving curls soft and lightweight.\n– Curl Hydrating Conditioner (500 mL): A nourishing conditioner that softens, detangles, and hydrates curls, leaving them smooth and ready for styling.\n– Curl Boosting Cream (500 mL): The star of the collection, a berry-infused curling cream that enhances definition, shape, and bounce while controlling frizz and leaving curls soft, shiny, and beautifully defined without weighing them down.\n– The Miracle Pro-Edition (100 mL): Hair Growth Booster, Water-Based Products infused with Vitamins, Peptides & Caffeine, Reduces hair fall within 10 days, with noticeable baby hair growth in 15–20 days.\n– Buttered Up Mask (250 mL): deep hydration from first use, contains Mango butter, Shea butter, Avocado butter & Honey.",
+   "price": "80.00",
+   "max_price": null,
+   "regular_price": "120.00",
+   "on_sale": true,
+   "in_stock": true,
+   "purchasable": true,
+   "choices": [],
+   "image2": {
+    "src": "https://alaraline.co/wp-content/uploads/2025/03/IMG_1224.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   }
+  },
+  {
+   "slot": 6,
+   "id": 6133,
+   "name": "Curls On Collection",
+   "slug": "curls-on-collection",
+   "type": "simple",
+   "image": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_0618-1-scaled.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   },
+   "details": "Curls On Collection:\n\nThis set includes\n– Curl Defining Shampoo (500 mL): A hydrating, berry-infused shampoo that deeply cleanses, nourishes, and enhances curl definition while leaving curls soft and lightweight.\n– Curl Hydrating Conditioner (500 mL): A nourishing conditioner that softens, detangles, and hydrates curls, leaving them smooth and ready for styling.\n– Curl Boosting Cream (500 mL): The star of the collection, a berry-infused curling cream that enhances definition, shape, and bounce while controlling frizz and leaving curls soft, shiny, and beautifully defined without weighing them down.",
+   "price": "54.00",
+   "max_price": null,
+   "regular_price": "60.00",
+   "on_sale": true,
+   "in_stock": true,
+   "purchasable": true,
+   "choices": [],
+   "image2": {
+    "src": "https://alaraline.co/wp-content/uploads/2025/03/IMG_1226.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   }
+  },
+  {
+   "slot": 7,
+   "id": 4632,
+   "name": "The Hair Mist Collection",
+   "slug": "the-hair-mist-collection",
+   "type": "simple",
+   "image": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_0705.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   },
+   "details": "4 Hair Mists Collection\n\nThis set Includes:\n\nAll our hair mists are alcohol-free, enriched with Vitamin E, and designed to leave your hair with a long-lasting, irresistible fragrance.\n\nDiscover Your Favorite Scent:\n\n– Pure Honey: Sweet & rich\n– Tropical Vanilla: Fruity & refreshing\n– Wild Berries: Clean & exotic\n– Coconut Milk: Powdery & creamy",
+   "price": "65.00",
+   "max_price": null,
+   "regular_price": "80.00",
+   "on_sale": true,
+   "in_stock": true,
+   "purchasable": true,
+   "choices": [],
+   "image2": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/11/IMG_1112.png",
+    "width": null,
+    "height": null,
+    "alt": ""
+   }
+  }
+ ],
+ "_note": "Snapshot of live data (2026-11-07) for local preview only. Production reads /wp-json/alara/v1/bundles. Photos re-synced from live 10 Nov 2026."
+}

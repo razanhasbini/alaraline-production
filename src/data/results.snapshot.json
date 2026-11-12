@@ -1,0 +1,385 @@
+{
+ "items": [
+  {
+   "id": 1,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-before-2.jpg",
+    "width": 491,
+    "height": 767,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-after-2.jpg",
+    "width": 498,
+    "height": 930,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 2,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-before-4.jpg",
+    "width": 497,
+    "height": 793,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-after-4.jpg",
+    "width": 499,
+    "height": 912,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 3,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-before-8.jpg",
+    "width": 438,
+    "height": 784,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-after-8.jpg",
+    "width": 529,
+    "height": 937,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 4,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/new-before-1.png",
+    "width": 351,
+    "height": 312,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/new-after-1.png",
+    "width": 237,
+    "height": 327,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 5,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/new-before-5.png",
+    "width": 190,
+    "height": 262,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/new-after-5.png",
+    "width": 195,
+    "height": 262,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 6,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-before-1.jpg",
+    "width": 454,
+    "height": 746,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-after-1.jpg",
+    "width": 570,
+    "height": 971,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 7,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-before-6.jpg",
+    "width": 440,
+    "height": 782,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-after-6.jpg",
+    "width": 511,
+    "height": 920,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 8,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-before-5.jpg",
+    "width": 483,
+    "height": 782,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-after-5.jpg",
+    "width": 476,
+    "height": 934,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 9,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-before-9.jpg",
+    "width": 463,
+    "height": 764,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/client-results-after-9-1.jpg",
+    "width": 434,
+    "height": 785,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 10,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/new-before-3.png",
+    "width": 185,
+    "height": 261,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/new-after-3.png",
+    "width": 185,
+    "height": 257,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 11,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/new-before-6.png",
+    "width": 190,
+    "height": 252,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/new-after-6.png",
+    "width": 190,
+    "height": 252,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 12,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/before-9.png",
+    "width": 192,
+    "height": 267,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/after-9.png",
+    "width": 195,
+    "height": 256,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 13,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/b-1.png",
+    "width": 195,
+    "height": 371,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/a1.png",
+    "width": 223,
+    "height": 440,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 14,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/b2.png",
+    "width": 197,
+    "height": 360,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/a2.png",
+    "width": 232,
+    "height": 422,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 15,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/b3.png",
+    "width": 190,
+    "height": 285,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/a3.png",
+    "width": 200,
+    "height": 375,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 16,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/b4.png",
+    "width": 260,
+    "height": 367,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/a5.png",
+    "width": 227,
+    "height": 489,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 17,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/b6.png",
+    "width": 221,
+    "height": 377,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/a6.png",
+    "width": 257,
+    "height": 447,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 18,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/b7.png",
+    "width": 262,
+    "height": 482,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/a7.png",
+    "width": 312,
+    "height": 597,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  },
+  {
+   "id": 19,
+   "title": "",
+   "before": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/IMG_0744.JPG.jpeg",
+    "width": 640,
+    "height": 1138,
+    "alt": "before"
+   },
+   "after": {
+    "src": "https://alaraline.co/wp-content/uploads/2026/10/IMG_0746.JPG.jpeg",
+    "width": 640,
+    "height": 1118,
+    "alt": "after"
+   },
+   "hair": "",
+   "time": "",
+   "handle": "",
+   "featured": false
+  }
+ ],
+ "_note": "Snapshot of the live Results Wall on 2026-11-07 for local preview. Production reads /wp-json/alara/v1/results."
+}

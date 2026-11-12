@@ -1,0 +1,282 @@
+{
+ "_source": "Copied from the live WordPress pages (Elementor data + Forminator form) on 2026-11-07. Edit text in wp-admin and re-copy, or edit here.",
+ "about": {
+  "mission": "We are on a mission to redefine hair care with transformative, nature-powered formulas.",
+  "portrait": "https://alaraline.co/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-07-at-3.21.04-AM-scaled.jpeg",
+  "storyTitle": "Our Story",
+  "storyHtml": "<p>ÀLara Line was born from the heart of South Lebanon — a land where the golden sun kisses the olive groves, where jasmine fills the evening air, and where life’s remedies are found in the embrace of nature.</p><p>Its founder, Lara Ammar, grew up in this land of resilience and beauty. In her childhood home, nature was the first and truest answer to every need. Her mother’s hands carried the wisdom of generations — blending wild herbs, fragrant flowers, and pure oils into gentle remedies for hair, skin, and soul.</p><p>In the South, life is both tender and strong. The seasons teach patience, the soil teaches perseverance, and nature teaches generosity. Lara’s earliest memories are of picking rosemary sprigs, watching her grandmother press olives for oil, and breathing in the sweet scent of blooming orange blossoms after the rain. These moments shaped her belief that beauty begins where nature and care meet.</p><p>Known for her long, radiant hair since she was a little girl, Lara’s secret was never in a bottle from a store — it was in the rituals passed down through the women of her family, crafted with love and the bounty of the land. As her passion grew, so did her curiosity. She pursued Pharmacy and Nutrition, gaining in-depth scientific knowledge of how natural ingredients work at the molecular level — how they penetrate, protect, and restore.</p><p>This expertise became her greatest tool. Lara understood not only what nature could offer but how to enhance its benefits through precise formulation. She mastered the balance between traditional wisdom and cutting-edge science, ensuring each ÀLara Line product delivers visible, transformative results.</p><p>Her knowledge gave her the confidence to grow ÀLara Line from a dream into a thriving brand, trusted by women across Lebanon and beyond. Every product is 100% organic, safe for all ages, and enriched with nature’s finest — from the sunlit fields of her homeland to the meticulous care of her laboratory.</p><p>For Lara, ÀLara Line is more than a business. It’s a promise born from the South — a place where strength is woven with beauty, where science meets tradition, and where every drop carries the soul of the land that raised her.</p>",
+  "quote": "Every strand deserves to shine — our promise is to make it happen",
+  "quoteAuthor": "Lara Ammar",
+  "quotePosition": "Founder, CEO",
+  "promiseImage1": "https://alaraline.co/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-13-at-5.21.33-PM.jpeg",
+  "promiseTitle": "Our Promise",
+  "promiseHtml": "<p>To strengthen, hydrate, revive, and transform your hair — with 100% organic care crafted by science and inspired by nature. We promise visible results, silky strands, and the confidence that comes with truly healthy hair.</p>",
+  "promiseImage2": "https://alaraline.co/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-13-at-5.03.27-PM.jpeg",
+  "closing": "Let Your Hair Speak Volumes!"
+ },
+ "ingredients": [
+  {
+   "image": "https://alaraline.co/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-14-at-5.24.35-PM.png",
+   "name": "Honey",
+   "html": "<p>Nature’s golden nectar, rich in vitamins, minerals, and antioxidants. Honey acts as a natural humectant, drawing moisture deep into the hair to keep it soft, smooth, and hydrated. It helps repair damage, adds luminous shine, tames frizz, and protects strands from dryness.</p>"
+  },
+  {
+   "image": "https://alaraline.co/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-14-at-5.47.31-PM.png",
+   "name": "Coconut butter",
+   "html": "<p>Coconut butter is a creamy, indulgent moisturizer that seeps deep into every strand, saturating hair with intense, long-lasting hydration. It restores the hair’s natural moisture balance, reviving even the driest, most brittle strands. As it smooths the cuticle and locks in hydration, frizz is tamed, texture becomes silky, and hair regains its natural movement and luminous shine.</p>"
+  },
+  {
+   "image": "https://alaraline.co/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-14-at-5.49.48-PM.png",
+   "name": "African shea butter",
+   "html": "<p>A rich, velvety emollient treasured for its unmatched ability to deeply hydrate and protect the hair. It penetrates the strands to restore moisture from within, softening rough texture and bringing brittle hair back to life. By smoothing the cuticle and sealing in hydration, shea butter tames frizz, reduces breakage, and enhances elasticity</p>"
+  },
+  {
+   "image": "https://alaraline.co/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-14-at-5.51.23-PM.png",
+   "name": "Mango butter",
+   "html": "<p>A luxurious, creamy ingredient celebrated for its ability to nourish, protect, and transform hair. Packed with vitamins A and E, it strengthens strands from within, repairs damage, and restores elasticity for hair that resists breakage. Its rich emollients smooth the cuticle, enhance natural shine, and shield hair from heat and environmental stress.</p>"
+  },
+  {
+   "image": "https://alaraline.co/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-14-at-5.55.06-PM.png",
+   "name": "Rosemary oil",
+   "html": "<p>A powerful botanical known for awakening hair follicles and stimulating healthy growth. By boosting blood circulation to the scalp, it delivers essential nutrients directly to the roots, encouraging thicker, stronger strands. Its natural antioxidants protect follicles from damage, helping to reduce hair fall and prolong the growth cycle.</p>"
+  },
+  {
+   "image": "https://alaraline.co/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-14-at-10.59.58-PM-1.png",
+   "name": "Argan oil",
+   "html": "<p>The nature’s liquid gold for the hair. It feeds the scalp with rich vitamins and fatty acids, helping hair grow stronger and healthier. By keeping strands deeply nourished and protected from damage, it reduces breakage so hair can grow longer and fuller.</p>"
+  },
+  {
+   "image": "https://alaraline.co/wp-content/uploads/2025/08/WhatsApp-Image-2025-08-14-at-11.03.18-PM.jpeg",
+   "name": "Biotin",
+   "html": "<p>known as the beauty vitamin, is essential for strong, healthy hair growth. It works from the root, helping hair grow thicker and more resilient while reducing breakage and shedding. By supporting the natural structure of each strand, biotin leaves hair fuller, shinier, and brimming with life.</p>"
+  }
+ ],
+ "contact": {
+  "icon": "https://alaraline.co/wp-content/uploads/2024/03/ezgif-4-4dbfb7dadd_prev_ui-e1711628616398.png",
+  "title": "Keep in touch with us",
+  "intro": "Got questions or feedback? Don't hesitate to reach out! Click below to drop us a message and our team will get back to you ASAP. We're here to assist you every step of the way!",
+  "formTitle": "Sent a message"
+ },
+ "faqs": {
+  "title": "Frequently Asked Questions",
+  "items": [
+   {
+    "title": "Are ÀLara Line products really 100% organic?",
+    "content": "<p>Yes 🤍 all our formulas are crafted with organic ingredients, pro-vitamins, peptides, and natural oils.</p>"
+   },
+   {
+    "title": "Are your products safe for kids and pregnant women?",
+    "content": "<p>Absolutely! Our products are designed to be gentle, sulfate-free, paraben-free, and safe for both kids and moms-to-be.</p>"
+   },
+   {
+    "title": "Do your products work for curly hair?",
+    "content": "<p>Yes, ÀLara Line is made for all hair types, including curly hair, to enhance natural texture and shine.</p>"
+   },
+   {
+    "title": "What makes ÀLara Line different from other brands?",
+    "content": "<p>Our products are pharmacy-developed, enriched with pro-vitamins and peptides, and specially created to solve real hair concerns with dreamy, effective formulas.</p>"
+   },
+   {
+    "title": "Are your products cruelty-free?",
+    "content": "<p>Yes 💕 ÀLara Line never tests on animals.</p>"
+   },
+   {
+    "title": "How can I choose the right product for my hair type?",
+    "content": "<p>You can check our product descriptions, or contact our support team to help you find the perfect match for your hair goals.</p>"
+   }
+  ]
+ },
+ "shippingPolicy": {
+  "html": "<div><strong>Shipping policy </strong></div><div> </div><div>Thank you for shopping with ÀLara Line. We are dedicated to ensuring that your orders reach you quickly and safely, wherever you are. Our shipping policy outlines the process, delivery timelines, and important details to make your shopping experience smooth and worry-free.</div><div> </div><div><strong>Order Processing Time </strong></div><div>•All orders are typically processed within 2–5 business days after we receive your payment confirmation.</div><div>•Orders placed on weekends or public holidays will be processed on the next business day.</div><div> </div><div><div><strong>Shipping Fees </strong></div><div> </div><div>Shipping rates are calculated according to the shipping method selected, the weight and dimensions of your items, and your delivery location.</div><div>•The exact shipping cost for your order will be displayed during checkout, before you complete your purchase.</div><div>•We partner with trusted carriers to ensure your order arrives safely and on time.</div><div> </div></div><div><div><strong>Delivery Timeframes</strong></div><div> </div><div>• Delivery times depend on your location, the shipping method chosen, and any unforeseen circumstances (such as weather or carrier delays).</div><div>•Once your order is confirmed, you will receive an email with an estimated delivery date, based on your shipping address and selected shipping option.</div><div> </div></div><div><strong>Worldwide Delivery</strong></div><div>We proudly ship our products to many international destinations.<br />Customs duties, taxes, or import fees may apply depending on your country’s regulations. These charges are the customer’s responsibility.</div><div> </div><div><strong>Track Your Shipment</strong></div><div>All shipped orders come with tracking details.<br />Once your package has been dispatched, you’ll receive an email containing your tracking number along with instructions to follow your delivery in real time.</div><div> </div><div>Get in Touch<br />For any questions about your order, our shipping policy, or other inquiries, our customer support team is always happy to assist you.<br />📧 Email: Info@alaraline.co<br />📞 Phone/WhatsApp: +961 81 624 204</div><div> </div><div>Thank You for Shopping With Us<br />We truly appreciate your trust in ÀLara Line.<br />Our team is dedicated to making your shopping experience seamless, enjoyable, and tailored to your needs.</div>"
+ },
+ "membership": {
+  "title": "Hello, beauty!\n\nWelcome to The ÀLara Club",
+  "introHtml": "<p>Your hair deserves a little extra love—and so do you! Become a member of the ÀLara Line family and enjoy sweet little perks along the way:</p><p>Be among the first to discover our new launches.</p><p>.Enjoy early access to selected products and special offers.</p><p>.Be the first to hear about our events, with opportunities to join us.</p><p>.Celebrate your birthday with special discounts and little surprises.</p><p>.Enjoy exclusive member offers and chances to receive gifts.</p><p>A little more care, a little more magic, and a whole lot of beautiful hair days.</p><p>Join the club. You belong here!</p>"
+ },
+ "membershipForm": {
+  "labels": {
+   "name": "Full Name",
+   "email": "Email Address",
+   "phone": "Phone",
+   "date": "Date",
+   "favorite": "What's your favorite ÀLara product? 💗",
+   "surprises": "What little surprises would you love to receive from ÀLara?",
+   "suggestions": "Alara would love to hear your suggestions💗",
+   "contact": "How would you like to hear from ÀLara?"
+  },
+  "datePlaceholder": "Birthday",
+  "suggestionsPlaceholder": "A new product, a scent, a bundle, an event, or anything you'd love us to introduce or improve. We're listening!",
+  "favorites": [
+   {
+    "value": "one",
+    "label": "Miracle Pro Edition",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/IMG_2445.png",
+    "productId": 3808
+   },
+   {
+    "value": "two",
+    "label": "Hair Repair Shampoo - Tropical Vanilla",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/IMG_2441.png",
+    "productId": 4159
+   },
+   {
+    "value": "three",
+    "label": "Intense Hydration Conditioner - Oh Honey",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/IMG_2438.png",
+    "productId": 3791
+   },
+   {
+    "value": "Anti-Dandruff-Shampoo",
+    "label": "Anti-Dandruff Shampoo",
+    "image": "https://alaraline.co/wp-content/uploads/2025/08/IMG_9027.png",
+    "productId": 4578
+   },
+   {
+    "value": "Leave-in--Hair-Cream",
+    "label": "Leave in- Hair Cream",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/IMG_2440.png",
+    "productId": 3799
+   },
+   {
+    "value": "Miracle-Mask",
+    "label": "Miracle Mask",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/IMG_2433.png",
+    "productId": 3803
+   },
+   {
+    "value": "Curls-Hydrating-Shampoo",
+    "label": "Curls Hydrating Shampoo",
+    "image": "https://alaraline.co/wp-content/uploads/2025/10/IMG_8555.png",
+    "productId": 6125
+   },
+   {
+    "value": "Curls-Hydrating-Conditioner",
+    "label": "Curls Hydrating Conditioner",
+    "image": "https://alaraline.co/wp-content/uploads/2025/10/IMG_8557.png",
+    "productId": 6128
+   },
+   {
+    "value": "Curl-Defining-Cream",
+    "label": "Curl Defining Cream",
+    "image": "https://alaraline.co/wp-content/uploads/2025/10/IMG_8552.png",
+    "productId": 6131
+   },
+   {
+    "value": "Curly-Hair-Brush",
+    "label": "Curly Hair Brush",
+    "image": "https://alaraline.co/wp-content/uploads/2026/10/curly-hair-brush.webp",
+    "productId": 4906
+   },
+   {
+    "value": "Detox-Scalp-Scrub",
+    "label": "Detox Scalp Scrub",
+    "image": "https://alaraline.co/wp-content/uploads/2026/06/IMG_8692.png",
+    "productId": 5573
+   },
+   {
+    "value": "Hair-Mist-Pure Honey",
+    "label": "Hair Mist - Pure Honey",
+    "image": "https://alaraline.co/wp-content/uploads/2026/10/IMG_8736.png",
+    "productId": 4137
+   },
+   {
+    "value": "Hair-Mist---Wild-Berries",
+    "label": "Hair Mist - Wild Berries",
+    "image": "https://alaraline.co/wp-content/uploads/2026/10/IMG_8734.png",
+    "productId": 4121
+   },
+   {
+    "value": "Hair-Mist---Tropical-Vanilla",
+    "label": "Hair Mist - Tropical Vanilla",
+    "image": "https://alaraline.co/wp-content/uploads/2026/10/IMG_8735.png",
+    "productId": 4198
+   },
+   {
+    "value": "Hair-Mist---Coconut",
+    "label": "Hair Mist - Coconut Milk",
+    "image": "https://alaraline.co/wp-content/uploads/2026/10/IMG_0128.png",
+    "productId": 4131
+   },
+   {
+    "value": "Scalp-Massager",
+    "label": "Scalp Massager",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/IMG_2090.png",
+    "productId": 3846
+   },
+   {
+    "value": "Deep-Repair-Capsules",
+    "label": "Deep Repair Capsules",
+    "image": "https://alaraline.co/wp-content/uploads/2025/10/IMG_2423.png",
+    "productId": 4903
+   },
+   {
+    "value": "MicroFiber-Towel",
+    "label": "Microfiber Towel",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/IMG_8599.png",
+    "productId": 3815
+   },
+   {
+    "value": "Wax-Stick",
+    "label": "Wax Stick",
+    "image": "https://alaraline.co/wp-content/uploads/2025/03/IMG_2434.png",
+    "productId": 4165
+   },
+   {
+    "value": "Diffuser",
+    "label": "Diffuser",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/Product-34-1.jpg",
+    "productId": 3852
+   },
+   {
+    "value": "Crystal-Glow-Hair-Syrum",
+    "label": "Crystal Glow Hair Syrum",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/IMG_2425.png",
+    "productId": 3820
+   },
+   {
+    "value": "Satin-Pillow-Cover",
+    "label": "Satin Pillow Cover",
+    "image": "https://alaraline.co/wp-content/uploads/2024/08/IMG_2442.png",
+    "productId": 3850
+   },
+   {
+    "value": "Alara's-Pouch",
+    "label": "Alara's Pouch",
+    "image": "https://alaraline.co/wp-content/uploads/2026/06/154D48D0-62F2-4D58-91D5-CE6B8555C595.png",
+    "productId": 5477
+   }
+  ],
+  "surprises": [
+   {
+    "value": "one",
+    "label": "Mini haircare products or samples"
+   },
+   {
+    "value": "two",
+    "label": "Hair accessories"
+   },
+   {
+    "value": "Personalized-haircare-recommendations",
+    "label": "Personalized haircare recommendations"
+   },
+   {
+    "value": "Exclusive-product-previews",
+    "label": "Exclusive product previews"
+   },
+   {
+    "value": "Invitations-to-ÀLara-events-or-workshops",
+    "label": "Invitations to ÀLara events or workshops"
+   }
+  ],
+  "contactPrefs": [
+   {
+    "value": "one",
+    "label": "Email — I'd love to receive new launches, exclusive offers, event announcements, and Hive updates."
+   },
+   {
+    "value": "two",
+    "label": "WhatsApp — I'd love to receive new launches, exclusive offers, event announcements, and Hive updates on WhatsApp."
+   }
+  ]
+ }
+}
