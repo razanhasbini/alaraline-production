@@ -34,7 +34,8 @@ export function Elevate() {
         <Link className="btn" href="/about">Explore more</Link>
       </div>
       <div className="elevate-media">
-        <Image className="elevate-img" src="/img/home/elevate-buttered-up-mask.webp" alt="" width={1414} height={1235} sizes="(max-width: 1080px) 90vw, 50vw" />
+        <Image className="elevate-img elevate-img-right" src="/img/home/elevate-big-right.webp" alt="" width={1139} height={1381} sizes="(max-width: 1024px) 66vw, 36vw" />
+        <Image className="elevate-img elevate-img-left" src="/img/home/elevate-small-left.webp" alt="" width={1122} height={1402} sizes="(max-width: 1024px) 43vw, 24vw" />
       </div>
     </section>
   );

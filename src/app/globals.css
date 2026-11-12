@@ -307,8 +307,10 @@ body:has(.xb-dialog[open]) { overflow: hidden; }
 .elevate-bee { width: 100px; height: auto; margin-bottom: 30px; }
 .elevate .title { max-width: 434px; margin: 0; }
 .elevate-copy p { margin: 34px 0 40px; }
-.elevate-media { justify-self: center; width: min(724px, 100%); }
-.elevate-img { width: 100%; height: auto; } /* the file is trimmed to the two photos (no empty padding) */
+.elevate-media { position: relative; justify-self: center; width: min(724px, 100%); aspect-ratio: 1414 / 1235; }
+.elevate-img { position: absolute; display: block; object-fit: cover; }
+.elevate-img-right { top: 0; right: 0; width: 71.5%; height: 100%; }
+.elevate-img-left { top: 30.5%; left: 0; z-index: 1; width: 47%; height: 63%; }
 @media (min-width: 1025px) {
   .elevate { grid-template-columns: 1fr 1fr; min-height: 1274px; padding: 0; gap: 0; }
   .elevate-bee { width: 138px; }
