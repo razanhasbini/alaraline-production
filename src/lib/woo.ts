@@ -1,5 +1,6 @@
 import 'server-only';
 import { cacheLife, cacheTag } from 'next/cache';
+import { recall, remember } from './fallback';
 
 // The only module that talks to WordPress. WooCommerce stays the source of truth for products and prices;
 // nothing here is hardcoded. Results are cached for an hour (and can be refreshed on demand by tag later).
@@ -60,21 +61,54 @@ type StoreProduct = {
   variations: { id: number; attributes: { name: string; value: string | null }[] }[];
 };
 
-/** The WordPress server occasionally answers 5xx or drops a request; try up to 3 times before giving up. */
+/**
+ * A WooCommerce Store API read. A server error or dropped connection is tried once more; "429 too many requests"
+ * is never repeated (asking again only makes the limit worse). If WordPress still can't answer, the last good
+ * answer is used (see fallback.ts), so the shop shows instead of an error page.
+ */
 async function store<T>(path: string): Promise<T> {
   let last = '';
-  for (let attempt = 0; attempt < 3; attempt++) {
-    if (attempt) await new Promise(r => setTimeout(r, 400 * attempt));
+  for (let attempt = 0; attempt < 2; attempt++) {
+    if (attempt) await new Promise(r => setTimeout(r, 600));
     try {
       const res = await fetch(`${STORE}${path}`, { headers: { Accept: 'application/json' } });
-      if (res.ok) return (await res.json()) as T;
+      if (res.ok) {
+        const data = (await res.json()) as T;
+        await remember(`store:${path}`, data);
+        return data;
+      }
       last = String(res.status);
-      if (res.status < 500 && res.status !== 429) break; // a real "not found"/"bad request": don't retry
+      if (res.status < 500) break; // 4xx, including 429: don't ask again
     } catch (e) {
       last = (e as Error).message;
     }
   }
+  const saved = await recall<T>(`store:${path}`);
+  if (saved !== undefined) {
+    console.warn(`[woo] ${path} → ${last}; showing the last saved copy`);
+    return saved;
+  }
   throw new Error(`WooCommerce ${path} → ${last}`);
+}
+
+/** A read with the read-only REST key (product meta, publish dates), with the same last-good-copy fallback. */
+async function restRead<T>(path: string): Promise<T | null> {
+  const key = process.env.WC_CONSUMER_KEY, secret = process.env.WC_CONSUMER_SECRET;
+  if (!key || !secret) return null;
+  try {
+    const res = await fetch(`${WC}/wp-json/wc/v3${path}`, {
+      headers: { Authorization: `Basic ${Buffer.from(`${key}:${secret}`).toString('base64')}` },
+    });
+    if (res.ok) {
+      const data = (await res.json()) as T;
+      await remember(`rest:${path}`, data);
+      return data;
+    }
+    console.warn(`[woo] REST ${path} → ${res.status}`);
+  } catch (e) {
+    console.warn(`[woo] REST ${path} →`, (e as Error).message);
+  }
+  return (await recall<T>(`rest:${path}`)) ?? null;
 }
 
 function toProduct(p: StoreProduct): Product {
@@ -113,14 +147,8 @@ async function getPublishDates(): Promise<Record<number, string>> {
   'use cache';
   cacheLife('hours');
   cacheTag('products');
-  const key = process.env.WC_CONSUMER_KEY, secret = process.env.WC_CONSUMER_SECRET;
-  if (!key || !secret) return {};
-  const res = await fetch(`${WC}/wp-json/wc/v3/products?per_page=100&_fields=id,date_created_gmt`, {
-    headers: { Authorization: `Basic ${Buffer.from(`${key}:${secret}`).toString('base64')}` },
-  });
-  if (!res.ok) return {};
-  const list = (await res.json()) as { id: number; date_created_gmt: string }[];
-  return Object.fromEntries(list.map(p => [p.id, p.date_created_gmt]));
+  const list = await restRead<{ id: number; date_created_gmt: string }[]>('/products?per_page=100&_fields=id,date_created_gmt');
+  return Object.fromEntries((list ?? []).map(p => [p.id, p.date_created_gmt]));
 }
 
 async function withBadges(products: Product[]): Promise<Product[]> {
@@ -178,14 +206,8 @@ export async function getProductTabs(id: number): Promise<Tab[]> {
   'use cache';
   cacheLife('hours');
   cacheTag('products', `tabs:${id}`);
-  const key = process.env.WC_CONSUMER_KEY, secret = process.env.WC_CONSUMER_SECRET;
-  if (!key || !secret) return [];
-  const res = await fetch(`${WC}/wp-json/wc/v3/products/${id}?_fields=meta_data`, {
-    headers: { Authorization: `Basic ${Buffer.from(`${key}:${secret}`).toString('base64')}` },
-  });
-  if (!res.ok) return [];
-  const { meta_data } = (await res.json()) as { meta_data: { key: string; value: unknown }[] };
-  const raw = meta_data.find(m => m.key === 'wb_custom_tabs')?.value;
+  const data = await restRead<{ meta_data: { key: string; value: unknown }[] }>(`/products/${id}?_fields=meta_data`);
+  const raw = data?.meta_data?.find(m => m.key === 'wb_custom_tabs')?.value;
   if (!Array.isArray(raw)) return [];
   return raw
     .filter((t): t is { title: string; content: string; position?: string } => typeof t?.title === 'string' && typeof t?.content === 'string')

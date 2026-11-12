@@ -729,3 +729,11 @@ main > :last-child { margin-bottom: 20px; }
 
 /* links with arrows nudge */
 .xh-btn span, .arrow { transition: transform .3s var(--ease-out); }
+
+/* "One moment, please": a page couldn't load (usually WordPress busy) — shown instead of a server error screen */
+.busy { display: grid; justify-items: center; gap: 16px; max-width: 520px; margin: 0 auto; padding: 90px 20px 110px; text-align: center; }
+.busy-mark { font: 400 30px/1 var(--font-butler, Georgia), serif; color: var(--pink, #e85c9c); }
+.busy h1 { font: 400 clamp(28px, 5vw, 38px)/1.15 var(--font-butler, Georgia), serif; color: #111; }
+.busy p { font: 400 16px/1.65 var(--font-sans); color: #444; }
+.busy-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 22px; margin-top: 6px; }
+.busy-home { font: 500 14px var(--font-sans); color: #111; border-bottom: 1px solid currentColor; }
