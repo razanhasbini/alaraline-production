@@ -54,16 +54,34 @@ export async function storeApi<T = RawCart>(path: string, init: { method?: strin
     return res;
   };
 
+  // WooCommerce's answer as JSON. A PHP notice printed by a plugin before the JSON would break a plain
+  // res.json(), so anything before the first { or [ is skipped. Unreadable answers are logged (Worker logs).
+  type Answer = (T & { code?: string; message?: string }) | null;
+  const read = async (r: Response, p: string): Promise<Answer> => {
+    const text = await r.text().catch(() => '');
+    try { return JSON.parse(text); } catch { /* try below */ }
+    const start = text.search(/[{[]/);
+    if (start > 0) { try { return JSON.parse(text.slice(start)); } catch { /* logged below */ } }
+    console.error(`[cart] WooCommerce answered ${r.status} without readable JSON on ${p}:`, text.slice(0, 600));
+    return null;
+  };
+
   // changes need a nonce: get one first if this shopper has none yet, and once more if it expired
   if (method !== 'GET' && !ids.nonce) await send('GET', '/cart');
   let res = await send(method, path, init.json);
-  let data = await res.json().catch(() => null) as (T & { code?: string; message?: string }) | null;
+  let data = await read(res, path);
   if (method !== 'GET' && res.status === 401 && /nonce/i.test(data?.code ?? '')) {
     await send('GET', '/cart');
     res = await send(method, path, init.json);
-    data = await res.json().catch(() => null) as (T & { code?: string; message?: string }) | null;
+    data = await read(res, path);
   }
-  if (!res.ok) throw new CartError(decode(data?.message ?? 'Something went wrong. Please try again.'), res.status, data?.code ?? '');
+  if (!res.ok) {
+    console.error(`[cart] ${method} ${path} → ${res.status}`, data?.code ?? '', data?.message ?? '');
+    throw new CartError(decode(data?.message ?? `The shop had a problem (error ${res.status}). Please try again.`), res.status, data?.code ?? '');
+  }
+  // the change went through but the answer was unreadable: read the cart again so the shopper sees the real result
+  if (data === null && path.startsWith('/cart')) data = await read(await send('GET', '/cart'), '/cart');
+  if (data === null) throw new CartError('The shop sent an unexpected answer. Please refresh the page.', 502);
   return data as T;
 }
 

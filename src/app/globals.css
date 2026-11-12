@@ -181,6 +181,9 @@ ul { padding: 0; list-style: none; }
 .xb-media { position: relative; display: block; aspect-ratio: 1 / 1; overflow: hidden; background: #fff; }
 .xb-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .55s ease; }
 .xb-slide.is-active { opacity: 1; }
+/* homepage bundle cards: a shorter 4:3 photo, the whole picture kept (the photos have white space around the products) */
+.xb-card .xb-media { aspect-ratio: 4 / 3; }
+.xb-card .xb-slide img { object-fit: contain; object-position: center; transform-origin: center; }
 .xb-slide img { object-fit: cover; object-position: center top; pointer-events: none; transform-origin: center top; transition: transform .9s cubic-bezier(.22, 1, .36, 1); }
 .xb-dots { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 17px; padding: 6px 0 3px; background: #fff; }
 .xb-dots button { width: 6px; height: 6px; padding: 0; border-radius: 50%; background: #d9c6cd; transition: background .25s, transform .25s; }

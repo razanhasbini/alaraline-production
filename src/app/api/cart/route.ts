@@ -84,6 +84,7 @@ export async function POST(req: Request) {
 }
 
 function fail(e: unknown) {
-  const err = e instanceof CartError ? e : new CartError('Something went wrong. Please try again.', 500);
+  if (!(e instanceof CartError)) console.error('[cart] unexpected error', e);
+  const err = e instanceof CartError ? e : new CartError('Something went wrong on our side. Please refresh the page and try again.', 500);
   return NextResponse.json({ ok: false, message: err.message, code: err.code }, { status: err.status });
 }

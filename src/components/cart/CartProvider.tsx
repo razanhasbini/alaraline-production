@@ -57,7 +57,12 @@ export default function CartProvider({ children }: { children: ReactNode }) {
         const res = await fetch('/api/cart', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
         const d = await res.json().catch(() => ({ ok: false, message: `The shop did not answer properly (error ${res.status}). Please try again.` }));
         if (d.cart) setCart(d.cart);
-        if (!d.ok) setError(d.message ?? 'Something went wrong.');
+        if (!d.ok) {
+          setError(d.message ?? 'Something went wrong.');
+          // a change can go through even when its answer was lost: show the cart as WooCommerce has it now
+          const now = await fetch('/api/cart').then(r => r.json()).catch(() => null);
+          if (now?.ok) setCart(now.cart);
+        }
         return d;
       } catch {
         setError('The shop could not be reached. Please try again.');
