@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/contact' },
 };
 
-// Live /contact/: coconut icon, "Keep in touch with us", Address / Phone Number / Email, then the "Sent a message" form.
+// Live /contact/: coconut icon, "Keep in touch with us", Address / Phone Number / Email, then the "Send us a message" form.
 export default function ContactPage() {
   const c = content.contact;
   return (

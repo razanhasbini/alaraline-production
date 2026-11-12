@@ -162,9 +162,10 @@
 .alara-packaging-options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .alara-package-card { border: 1px solid #e5e5e5; transition: border-color .25s, box-shadow .25s; }
 .alara-package-card.is-selected { border-color: #000; box-shadow: 0 0 0 1px #000; }
-.alara-package-photo { position: relative; aspect-ratio: 1; background: #faf6f2; overflow: hidden; }
+.alara-package-photo { position: relative; aspect-ratio: 1; background: #fff; overflow: hidden; }
 .alara-package-photo button { position: absolute; inset: 0; cursor: zoom-in; }
-.alara-package-photo img { object-fit: cover; object-position: top; transition: transform .5s; }
+/* the whole bag / box, with air around it (!important: the Cloudflare image component writes object-fit inline) */
+.alara-package-photo img { object-fit: contain !important; object-position: center; padding: 9%; transition: transform .5s; }
 .alara-package-photo button:hover img { transform: scale(1.04); }
 .alara-photo-count { position: absolute; right: 8px; bottom: 8px; padding: 2px 8px; border-radius: 10px; background: rgba(0, 0, 0, .6); color: #fff; font-size: 12px; }
 .alara-package-placeholder { display: grid; place-items: center; height: 100%; color: #c9a99b; }
@@ -174,8 +175,8 @@
 .alara-package-price { font-weight: 600; }
 .pkg-modal { position: fixed; inset: 0; z-index: 95; display: grid; place-items: center; padding: 16px; background: rgba(0, 0, 0, .7); }
 .pkg-modal-box { position: relative; width: min(600px, 100%); background: #fff; }
-.pkg-modal-img { position: relative; aspect-ratio: 1; background: #faf6f2; }
-.pkg-modal-img img { object-fit: contain; }
+.pkg-modal-img { position: relative; aspect-ratio: 1; background: #fff; }
+.pkg-modal-img img { object-fit: contain !important; padding: 4%; }
 .pkg-modal-close { position: absolute; top: -40px; right: 0; color: #fff; font-size: 32px; line-height: 1; }
 .pkg-prev, .pkg-next { position: absolute; top: 50%; translate: 0 -50%; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, .9); font-size: 26px; line-height: 1; color: #000; }
 .pkg-prev { left: 10px; } .pkg-next { right: 10px; }

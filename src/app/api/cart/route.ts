@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
-import { CartError, checkoutBlockedReason, customerToken, storeApi, toCart, type RawCart } from '@/lib/cart';
+import { CartError, EMPTY_CART, checkoutBlockedReason, customerToken, hasCart, storeApi, toCart, type RawCart } from '@/lib/cart';
 
 // The shopper's cart. Every action is performed by WooCommerce (Store API); this only relays it.
 export async function GET() {
-  try { return NextResponse.json({ ok: true, cart: toCart(await storeApi('/cart')) }); }
+  try {
+    if (!(await hasCart())) return NextResponse.json({ ok: true, cart: EMPTY_CART }); // nothing added yet: no need to ask WordPress
+    return NextResponse.json({ ok: true, cart: toCart(await storeApi('/cart')) });
+  }
   catch (e) { return fail(e); }
 }
 

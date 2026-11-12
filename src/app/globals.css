@@ -20,6 +20,8 @@
   --gutter: 15px;
 }
 @media (min-width: 768px) { :root { --hb-h: 60px; } }
+/* phones wide enough (most): the offer bar fits on one line, giving the page back ~30px on every screen */
+@media (min-width: 380px) and (max-width: 767px) { :root { --hb-h: 42px; } }
 /* sticky header height (phone row / desktop two rows), for things that stick or scroll to below it */
 :root { --hdr-h: 60px; }
 @media (min-width: 1200px) { :root { --hdr-h: 112px; } }
@@ -63,7 +65,12 @@ ul { padding: 0; list-style: none; }
 .hashbar-timer { display: flex; align-items: baseline; gap: 6px; }
 .hashbar-timer > span:first-child { font-size: .9em; white-space: nowrap; }
 .hashbar-count { min-width: 9ch; font: 700 16px/1.5 'Courier New', monospace; letter-spacing: .5px; color: #ffb6d5; white-space: nowrap; text-align: left; }
-@media (max-width: 767px) { .hashbar { flex-direction: column; } }
+@media (max-width: 379px) { .hashbar { flex-direction: column; } }
+@media (min-width: 380px) and (max-width: 767px) {
+  .hashbar { flex-wrap: nowrap; gap: 0 7px; padding: 4px 10px; font-size: 13.5px; white-space: nowrap; }
+  .hashbar-timer { gap: 4px; }
+  .hashbar-count { min-width: 0; font-size: 13px; }
+}
 .topbar { display: flex; align-items: center; height: 40px; padding: 0 var(--gutter); background: var(--blush); color: #fff;
   font: italic 400 15px/1 'Cormorant Garamond', Garamond, Georgia, serif; }
 .topbar p { width: 100%; }
@@ -181,10 +188,12 @@ ul { padding: 0; list-style: none; }
 .xb-media { position: relative; display: block; aspect-ratio: 1 / 1; overflow: hidden; background: #fff; }
 .xb-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .55s ease; }
 .xb-slide.is-active { opacity: 1; }
-/* homepage bundle cards: a shorter 4:3 photo, the whole picture kept (the photos have white space around the products) */
-.xb-card .xb-media { aspect-ratio: 4 / 3; }
-.xb-card .xb-slide img { object-fit: contain; object-position: center; transform-origin: center; }
 .xb-slide img { object-fit: cover; object-position: center top; pointer-events: none; transform-origin: center top; transition: transform .9s cubic-bezier(.22, 1, .36, 1); }
+/* Christmas bundle photos (cards + pop-up): the whole picture with a little air around it, never cropped.
+   !important because the Cloudflare image component writes object-fit: cover inline on fill images. */
+.xb-card .xb-media { aspect-ratio: 4 / 3; }
+.xb-slide img { object-fit: contain !important; object-position: center !important; transform-origin: center; padding: 3%; }
+.xb-sheet-media .xb-slide img { padding: 5%; }
 .xb-dots { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 17px; padding: 6px 0 3px; background: #fff; }
 .xb-dots button { width: 6px; height: 6px; padding: 0; border-radius: 50%; background: #d9c6cd; transition: background .25s, transform .25s; }
 .xb-dots button.is-active { background: #7e4057; transform: scale(1.12); }
@@ -272,7 +281,10 @@ body:has(.xb-dialog[open]) { overflow: hidden; }
 .pol-stage { position: relative; display: flex; flex-direction: column; align-items: stretch; padding: 15px 1% 8px; isolation: isolate; }
 .pol-card { position: relative; width: 61%; margin: 0; padding: 8px 8px 0; background: #fff;
   box-shadow: 0 13px 23px -12px rgba(75, 40, 50, .27), 0 1px 4px rgba(0, 0, 0, .06); transition: transform .6s cubic-bezier(.34, 1.4, .5, 1); }
-.pol-img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: contain; background: #fff; }
+/* every before/after photo in the same square polaroid frame, filled edge to edge (clients' photos come in all
+   shapes). !important: the Cloudflare image component writes each photo's own shape inline. */
+.pol-img { display: block; width: 100% !important; height: auto !important; max-width: none !important; max-height: none !important;
+  aspect-ratio: 1 / 1 !important; object-fit: cover !important; object-position: 50% 30% !important; background: #f4eee9; }
 .pol-card figcaption { display: grid; place-items: center; height: 39px; font: italic 400 18px/1 var(--font-serif); color: #111; }
 .pol-before { align-self: flex-start; z-index: 1; transform: rotate(-3deg); transform-origin: 50% 0; }
 .pol-after { align-self: flex-end; z-index: 2; margin-top: 8px; transform: rotate(3deg); transform-origin: 20% 0; }
@@ -333,8 +345,7 @@ body:has(.xb-dialog[open]) { overflow: hidden; }
 @media (min-width: 1081px) { .love-card { flex-basis: 33.3333%; } }
 .love-stars { margin-bottom: 14px; color: #000; font-size: 15px; letter-spacing: 2px; }
 .love-card blockquote { margin-bottom: 38px; font: 400 18px/1.67 var(--font-sans); color: #000; white-space: pre-line; }
-.love-card blockquote:not(.is-open) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 7; overflow: hidden; }
-.love-more { align-self: flex-start; margin: -26px 0 30px; padding: 4px 0; font: 500 14px var(--font-sans); color: var(--pink); border-bottom: 1px solid currentColor; }
+.love-card blockquote:not(.is-open) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 7; overflow: hidden; }.love-more { align-self: flex-start; margin: -26px 0 30px; padding: 4px 0; font: 500 14px var(--font-sans); color: var(--pink); border-bottom: 1px solid currentColor; }
 .love-more:hover { color: #000; }
 .love-card figcaption { display: flex; align-items: center; gap: 15px; margin-top: auto; }
 .love-card figcaption img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
@@ -520,7 +531,8 @@ main > :last-child { margin-bottom: 20px; }
   background: #25d366; color: #fff; box-shadow: 0 10px 26px -8px rgba(0, 0, 0, .4); transition: transform .2s; }
 .whatsapp:hover { transform: scale(1.06); }
 .whatsapp svg { width: 34px; height: 34px; }
-@media (max-width: 767px) { .whatsapp { right: 18px; bottom: 18px; width: 60px; height: 60px; } .whatsapp svg { width: 28px; height: 28px; } }
+/* phones: a smaller button tucked into the corner, so it covers less of prices and product names */
+@media (max-width: 767px) { .whatsapp { right: 12px; bottom: 14px; width: 50px; height: 50px; } .whatsapp svg { width: 25px; height: 25px; } }
 .snow { position: fixed; inset: 0; z-index: 35; width: 100vw; height: 100vh; pointer-events: none; }
 
 /* ---------- small screens + motion ---------- */

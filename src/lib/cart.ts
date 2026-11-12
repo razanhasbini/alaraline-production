@@ -77,13 +77,27 @@ export async function storeApi<T = RawCart>(path: string, init: { method?: strin
   }
   if (!res.ok) {
     console.error(`[cart] ${method} ${path} → ${res.status}`, data?.code ?? '', data?.message ?? '');
-    throw new CartError(decode(data?.message ?? `The shop had a problem (error ${res.status}). Please try again.`), res.status, data?.code ?? '');
+    const fallback = res.status === 429
+      ? 'The shop is very busy right now. Please wait a minute and try again.'
+      : `The shop had a problem (error ${res.status}). Please try again.`;
+    throw new CartError(decode(data?.message ?? fallback), res.status, data?.code ?? '');
   }
   // the change went through but the answer was unreadable: read the cart again so the shopper sees the real result
   if (data === null && path.startsWith('/cart')) data = await read(await send('GET', '/cart'), '/cart');
   if (data === null) throw new CartError('The shop sent an unexpected answer. Please refresh the page.', 502);
   return data as T;
 }
+
+/** Has this shopper started a cart? A visitor who never added anything has none, and their (empty) bag is
+ *  shown without asking WordPress: most visitors only browse, so this spares the store most cart requests. */
+export async function hasCart() { return !!(await cookies()).get(CART)?.value; }
+
+export const EMPTY_CART: Cart = {
+  count: 0, items: [], coupons: [], fees: [], subtotal: 0, discount: 0, shipping: null, shippingLabel: 'Delivery', total: 0,
+  currency: 'US$', packaging: 'bag', payment: ['cod'],
+  billing: { first_name: '', last_name: '', company: '', address_1: '', address_2: '', city: '', state: '', postcode: '', country: 'LB', email: '', phone: '' },
+  errors: [],
+};
 
 /* ---------------------------------------------------------------- customer (signed-in shopper) */
 

@@ -17,14 +17,24 @@ export default function Reviews({ rating, count, reviews, writeUrl }: { rating: 
         </div>
         <div className="rv-layout">
           <div className="rv-card">
-            <p className="rv-avg">{rating ? rating.toFixed(1).replace(/\.0$/, '') : 0}</p>
-            <p className="rv-stars" aria-label={`${rating} out of 5`}>{'★★★★★'}</p>
-            <p className="rv-count">{count} Reviews, 0 Q&amp;As</p>
-            <ul className="rv-bars">
-              {bars.map(b => (
-                <li key={b.s}><span>{b.s} {b.s === 1 ? 'star' : 'stars'}</span><i><b style={{ width: `${b.pct}%` }} /></i><span>{b.pct}%</span></li>
-              ))}
-            </ul>
+            {count > 0 ? (
+              <>
+                <p className="rv-avg">{rating.toFixed(1).replace(/\.0$/, '')}</p>
+                <p className="rv-stars" aria-label={`${rating} out of 5`}>{'★★★★★'}</p>
+                <p className="rv-count">{count} {count === 1 ? 'Review' : 'Reviews'}</p>
+                <ul className="rv-bars">
+                  {bars.map(b => (
+                    <li key={b.s}><span>{b.s} {b.s === 1 ? 'star' : 'stars'}</span><i><b style={{ width: `${b.pct}%` }} /></i><span>{b.pct}%</span></li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              // no reviews yet: an invitation instead of a big "0" and empty bars
+              <>
+                <p className="rv-stars" aria-hidden="true">{'★★★★★'}</p>
+                <p className="rv-count">No reviews yet. Tried it? Tell others what you think.</p>
+              </>
+            )}
             <a className="rv-btn" href={writeUrl}>✎ Write a review</a>
             <a className="rv-btn" href={writeUrl}>💬 Ask a question</a>
           </div>

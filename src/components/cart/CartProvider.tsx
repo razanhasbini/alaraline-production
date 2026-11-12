@@ -45,8 +45,8 @@ export default function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     enqueue(async () => {
       const d = await fetch('/api/cart').then(r => r.json()).catch(() => null);
+      // a failed background load stays quiet: the error would otherwise sit in every buy box before the shopper did anything
       if (d?.ok) setCart(d.cart);
-      else setError(d?.message ?? 'The bag could not be loaded. Please refresh the page.');
     });
   }, [enqueue]);
 

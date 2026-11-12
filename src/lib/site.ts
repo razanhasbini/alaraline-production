@@ -39,8 +39,7 @@ export const footer = {
     { label: 'Shipping Policy', href: '/shipping-policy' },
     { label: 'Our Story', href: '/about' },
     { label: 'Ingredients', href: '/ingredients' },
-    // Same as live. NOTE: /features/ returns 404 on alaraline.co today.
-    { label: 'Hair Scan', href: `${WC_PUBLIC}/features/#hair-scan` },
+    // "Hair Scan" (/features/) is left out until that page exists: it returns 404 on WordPress.
   ],
   contact: { email: 'Info@alaraline.co', phone: '+961 81 624 204', tel: '+96181624204', place: 'Baabda, Lebanon' },
   socials: [
