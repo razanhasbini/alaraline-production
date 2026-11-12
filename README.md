@@ -50,3 +50,8 @@ The shop needs the **ÀLara Headless API 1.2.0** plugin (`../wp-plugins/alara-he
 
 WhatsApp alerts for new orders (needs a sending service); refreshing the site automatically after edits made in wp-admin
 (needs the site deployed).
+
+## Cloudflare Workers
+
+The site can also run on Cloudflare Workers via vinext: `npm run dev:vinext`, `npm run build:vinext`,
+`npm run deploy:vinext`. Setup, settings and the first preview deploy are in **CLOUDFLARE_DEPLOYMENT.md**.

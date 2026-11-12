@@ -9,6 +9,7 @@ import type { Customer } from '@/lib/orders';
 import { useAuth } from '../account/AuthPopup';
 import { formatPrice } from '@/lib/site';
 import { useCart } from './CartProvider';
+import { wpImage } from '@/lib/wp-image';
 
 type Addr = { first_name: string; last_name: string; country: string; address_1: string; address_2: string; city: string; state: string; postcode: string; phone: string; email: string };
 const EMPTY: Addr = { first_name: '', last_name: '', country: 'LB', address_1: '', address_2: '', city: '', state: '', postcode: '', phone: '', email: '' };
@@ -126,7 +127,7 @@ export default function CheckoutForm({ packaging, blocked }: { packaging: Packag
                       <div className="alara-package-photo">
                         {ph[0] ? (
                           <button type="button" onClick={() => setGallery({ title: name, photos: ph, at: 0 })} aria-label={`View ${name} photos in popup`}>
-                            <Image src={ph[0]} alt={name} fill sizes="(max-width: 767px) 45vw, 260px" />
+                            <Image src={wpImage(ph[0], 600)} alt={name} fill sizes="(max-width: 767px) 45vw, 260px" />
                             {ph.length > 1 && <span className="alara-photo-count" aria-hidden="true">1 / {ph.length}</span>}
                           </button>
                         ) : (
@@ -223,7 +224,7 @@ export default function CheckoutForm({ packaging, blocked }: { packaging: Packag
           <div className="pkg-modal-box" onClick={e => e.stopPropagation()}>
             <button type="button" className="pkg-modal-close" onClick={() => setGallery(null)} aria-label="Close packaging photo preview">×</button>
             <div className="pkg-modal-img">
-              <Image src={gallery.photos[gallery.at]} alt={gallery.title} fill sizes="(max-width: 767px) 90vw, 600px" />
+              <Image src={wpImage(gallery.photos[gallery.at], 1200)} alt={gallery.title} fill sizes="(max-width: 767px) 90vw, 600px" />
               {gallery.photos.length > 1 && <>
                 <button type="button" className="pkg-prev" aria-label="Previous photo" onClick={() => setGallery(g => g && { ...g, at: (g.at + g.photos.length - 1) % g.photos.length })}>‹</button>
                 <button type="button" className="pkg-next" aria-label="Next photo" onClick={() => setGallery(g => g && { ...g, at: (g.at + 1) % g.photos.length })}>›</button>

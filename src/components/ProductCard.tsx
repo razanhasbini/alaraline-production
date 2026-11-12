@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { Product } from '@/lib/woo';
 import CardActions from './cart/CardActions';
 import Price from './Price';
+import { wpImage } from '@/lib/wp-image';
 
 /**
  * Same badges as the live theme + "Product Labels" snippet: Sold out, New (recently added),
@@ -29,8 +30,8 @@ export default function ProductCard({ product: p, priority = false }: { product:
     <article className={`card${alt ? ' has-alt' : ''}`}>
       <div className="card-media">
         <Link className="card-img" href={href} tabIndex={-1} aria-hidden="true">
-          {img && <Image className="card-img-main" src={img.src} alt="" fill sizes={sizes} priority={priority} />}
-          {alt && <Image className="card-img-alt" src={alt.src} alt="" fill sizes={sizes} />}
+          {img && <Image className="card-img-main" src={wpImage(img.src, 640)} alt="" fill sizes={sizes} priority={priority} />}
+          {alt && <Image className="card-img-alt" src={wpImage(alt.src, 640)} alt="" fill sizes={sizes} />}
         </Link>
         {b.length > 0 && <div className="badges">{b.map(x => <span key={x.label} className={`badge ${x.cls}`}>{x.label}</span>)}</div>}
         <CardActions id={p.id} name={p.name} slug={p.slug} image={img?.src ?? ''} quickAdd={simple && p.purchasable && p.inStock} inStock={p.inStock} />

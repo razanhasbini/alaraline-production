@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import reviews from '@/data/reviews.json';
+import { wpImage } from '@/lib/wp-image';
 
 // "Customer Love": the 11 reviews from the live Elementor testimonial widget, 3 per view on desktop,
 // 2 on tablets, 1 on phones, moving every 6 seconds (live: 3, too quick to read a review) (paused on hover/focus and with reduced motion), with dots.
@@ -49,7 +50,7 @@ export default function CustomerLove() {
                   </button>
                 )}
                 <figcaption>
-                  <Image src={r.avatar} alt="" width={60} height={60} sizes="60px" />
+                  <Image src={wpImage(r.avatar, 120)} alt="" width={60} height={60} sizes="60px" />
                   <cite>{r.name}</cite>
                 </figcaption>
               </figure>

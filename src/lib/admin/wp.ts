@@ -44,14 +44,14 @@ async function call(path: string, init: Init = {}): Promise<Response> {
   return res;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export async function wp<T>(_session: AdminSession, path: string, init?: Init): Promise<T> {
   const text = await (await call(path, init)).text();
   try { return (text ? JSON.parse(text) : null) as T; } catch { return null as T; }
 }
 
 /** Same as wp() but also returns WooCommerce's X-WP-Total / X-WP-TotalPages headers (for paging). */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export async function wpList<T>(_session: AdminSession, path: string): Promise<{ items: T[]; total: number; pages: number }> {
   const res = await call(path);
   return { items: (await res.json()) as T[], total: Number(res.headers.get('x-wp-total') ?? 0), pages: Number(res.headers.get('x-wp-totalpages') ?? 1) };

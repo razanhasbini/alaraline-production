@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       new URL("https://alaraline.co/wp-content/uploads/**"),
       { protocol: "https", hostname: "i*.wp.com", pathname: "/alaraline.co/wp-content/uploads/**" },
+      // WordPress's own address after the move (see CLOUDFLARE_DEPLOYMENT.md)
+      new URL("https://shop.alaraline.co/wp-content/uploads/**"),
+      { protocol: "https", hostname: "i*.wp.com", pathname: "/shop.alaraline.co/wp-content/uploads/**" },
       // the local Docker test store (only when the site is pointed at it)
       ...(process.env.WC_URL?.startsWith("http://localhost")
         ? [{ protocol: "http" as const, hostname: "localhost" }, { protocol: "https" as const, hostname: "localhost" }]

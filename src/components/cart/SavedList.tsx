@@ -7,6 +7,7 @@ import { formatPrice } from '@/lib/site';
 import { HeartIcon } from '../Icons';
 import { useCart } from './CartProvider';
 import { useCompare, useWishlist } from './Wishlist';
+import { wpImage } from '@/lib/wp-image';
 
 /** The wishlist and compare pages. The saved product ids live in the shopper's browser, as with the live plugin. */
 export default function SavedList({ kind, products }: { kind: 'wishlist' | 'compare'; products: LeanProduct[] }) {
@@ -47,7 +48,7 @@ function WishTable({ items, remove }: { items: LeanProduct[]; remove: (id: numbe
         <tbody>
           {items.map(p => (
             <tr key={p.id}>
-              <td><Link href={`/product/${p.slug}`}>{p.image && <Image src={p.image} alt="" width={80} height={80} />}</Link></td>
+              <td><Link href={`/product/${p.slug}`}>{p.image && <Image src={wpImage(p.image, 160)} alt="" width={80} height={80} />}</Link></td>
               <td><Link href={`/product/${p.slug}`}>{p.name}</Link></td>
               <td className="price">{price(p)}</td>
               <td>{p.inStock ? 'In Stock' : 'Out of stock'}</td>
@@ -80,7 +81,7 @@ function CompareTable({ items, remove, clear }: { items: LeanProduct[]; remove: 
               {items.map(p => (
                 <td key={p.id}>
                   <button type="button" className="wl-x" onClick={() => remove(p.id)} aria-label={`Remove ${p.name} from compare`}>×</button>
-                  <Link href={`/product/${p.slug}`}>{p.image && <Image src={p.image} alt="" width={180} height={180} />}{p.name}</Link>
+                  <Link href={`/product/${p.slug}`}>{p.image && <Image src={wpImage(p.image, 360)} alt="" width={180} height={180} />}{p.name}</Link>
                   <div><Buy p={p} /></div>
                 </td>
               ))}

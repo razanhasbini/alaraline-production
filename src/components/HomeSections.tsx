@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { essentials } from '@/lib/site';
+import { wpImage } from '@/lib/wp-image';
 
 // Static homepage sections, with the same text, images and links as the live Elementor page.
 
@@ -12,7 +13,7 @@ export function Essentials() {
         <div className="cats">
           {essentials.map(c => (
             <Link key={c.slug} className="cat" href={`/product-category/${c.slug}`}>
-              <span className="cat-img"><Image src={c.img} alt="" fill sizes="(max-width: 1080px) 45vw, 300px" /></span>
+              <span className="cat-img"><Image src={wpImage(c.img, 640)} alt="" fill sizes="(max-width: 1080px) 45vw, 300px" /></span>
               <h5>{c.name}</h5>
             </Link>
           ))}
@@ -27,7 +28,7 @@ export function Elevate() {
   return (
     <section className="elevate" aria-labelledby="elevate-title">
       <div className="elevate-copy">
-        <Image className="elevate-bee" src="https://alaraline.co/wp-content/uploads/2026/07/IMG_5814-1.png" alt="" width={138} height={138} sizes="138px" />
+        <Image className="elevate-bee" src={wpImage('https://alaraline.co/wp-content/uploads/2026/07/IMG_5814-1.png', 280)} alt="" width={138} height={138} sizes="138px" />
         <h2 id="elevate-title" className="title">Elevate Your Haircare Routine with ÀLara Line</h2>
         <p>ÀLara Line Exclusive Lineup of Dreamy Hair Essentials!</p>
         <Link className="btn" href="/about">Explore more</Link>

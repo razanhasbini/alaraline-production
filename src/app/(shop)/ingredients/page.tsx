@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Crumbs from '@/components/Crumbs';
 import content from '@/data/pages.json';
+import { wpImage } from '@/lib/wp-image';
 
 export const metadata: Metadata = {
   title: 'Ingredients',
@@ -18,7 +19,7 @@ export default function IngredientsPage() {
       <div className="wrap ingredients">
         {content.ingredients.map((i, n) => (
           <section key={i.name} className="ingredient" aria-labelledby={`ing-${n}`}>
-            <div className="ingredient-img"><Image src={i.image} alt={i.name} fill sizes="(max-width: 760px) 100vw, 345px" priority={n === 0} /></div>
+            <div className="ingredient-img"><Image src={wpImage(i.image, 700)} alt={i.name} fill sizes="(max-width: 760px) 100vw, 345px" priority={n === 0} /></div>
             <div>
               <h2 id={`ing-${n}`}>{i.name}</h2>
               <div dangerouslySetInnerHTML={{ __html: i.html }} />

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import content from '@/data/pages.json';
+import { wpImage } from '@/lib/wp-image';
 
 type Result = { success: boolean; message: string; errors?: Record<string, string> };
 
@@ -77,7 +78,7 @@ export default function MembershipForm({ favorites }: { favorites: { value: stri
               <input type="radio" name="radio-1" value={o.value} />
               <span className="mf-product-img">
                 {o.image && !noPhoto[o.value]
-                  ? <Image src={o.image} alt="" fill sizes="(max-width: 600px) 30vw, 120px" onError={() => setNoPhoto(n => ({ ...n, [o.value]: true }))} />
+                  ? <Image src={wpImage(o.image, 260)} alt="" fill sizes="(max-width: 600px) 30vw, 120px" onError={() => setNoPhoto(n => ({ ...n, [o.value]: true }))} />
                   : <span className="mf-product-mono" aria-hidden="true">{o.label.replace(/[^A-Za-zÀ-ÿ ]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('')}</span>}
               </span>
               <span className="mf-product-name">{o.label}</span>

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import type { Bundle } from '@/lib/alara';
+import { wpImage } from '@/lib/wp-image';
 
 /** The bundle's photos (1 or 2), deduplicated, as the live plugin does. */
 export const photosOf = (b: Bundle) =>
@@ -47,7 +48,7 @@ export default function BundlePhotos({ b, sizes, auto = false, eager = false, ho
         <span className="xb-media">
           {photos.map((p, i) => (
             <span key={p.src} className={`xb-slide${i === shown ? ' is-active' : ''}`} aria-hidden={i !== shown}>
-              <Image src={p.src} alt={`${b.name} photo ${i + 1}`} fill sizes={sizes} draggable={false} loading={eager ? 'eager' : 'lazy'} />
+              <Image src={wpImage(p.src, 900)} alt={`${b.name} photo ${i + 1}`} fill sizes={sizes} draggable={false} loading={eager ? 'eager' : 'lazy'} />
             </span>
           ))}
         </span>
