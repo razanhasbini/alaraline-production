@@ -193,7 +193,7 @@ ul { padding: 0; list-style: none; }
    !important because the Cloudflare image component writes object-fit: cover inline on fill images. */
 .xb-card .xb-media { aspect-ratio: 4 / 3; }
 .xb-slide img { object-fit: contain !important; object-position: center !important; transform-origin: center; padding: 3%; }
-.xb-sheet-media .xb-slide img { padding: 5%; }
+.xb-sheet-media .xb-slide img { padding: 0; } /* square photo in a square frame: already whole, no extra air needed */
 .xb-dots { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 17px; padding: 6px 0 3px; background: #fff; }
 .xb-dots button { width: 6px; height: 6px; padding: 0; border-radius: 50%; background: #d9c6cd; transition: background .25s, transform .25s; }
 .xb-dots button.is-active { background: #7e4057; transform: scale(1.12); }
@@ -266,7 +266,7 @@ body:has(.xb-dialog[open]) { overflow: hidden; }
 @media (min-width: 768px) { .cat h5 { margin-top: 48px; font-size: 34px; } }
 
 /* ---------- The Results Wall (Alara Client Results v1.2.0) ---------- */
-.clients { padding: 110px 0 100px; background: #fff; overflow: hidden; }
+.clients { padding: 110px 0 60px; background: #fff; overflow: hidden; }
 .lwrap { max-width: 1410px; margin: 0 auto; padding: 0 15px; }
 .cr-head { margin-bottom: 70px; text-align: center; }
 .cr-eyebrow { margin-bottom: 18px; font: 600 12px/1 var(--font-sans); letter-spacing: .28em; text-transform: uppercase; color: var(--pink); }
