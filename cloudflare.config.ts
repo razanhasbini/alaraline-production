@@ -36,8 +36,10 @@ export default defineConfig({
       // Admin panel sign-in: cookie encryption secret + users (`node scripts/admin-user.mjs <user> <password> [Name]`)
       ADMIN_SESSION_SECRET: bindings.secret(),
       ADMIN_USERS: bindings.secret(),
-      // Ordering switch. Not set (or anything but "1") = orders are blocked. "1" = real orders go to WooCommerce.
-      ALLOW_LIVE_CHECKOUT: bindings.secret(),
+      // Ordering switch, kept here (not as a secret, which would block deploys whenever it is missing).
+      // "1" = real orders go to WooCommerce (turned on by the owner on 12 Nov 2026 for a test order).
+      // Anything else, e.g. "0" = orders are blocked. Change it and push to switch.
+      ALLOW_LIVE_CHECKOUT: bindings.text("1"),
     },
   }),
 });
