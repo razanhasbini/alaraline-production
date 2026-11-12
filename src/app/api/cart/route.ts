@@ -25,6 +25,10 @@ const address = (a: Record<string, string> | undefined, withContact: boolean) =>
   if (withContact) k.push('phone', 'email');
   return Object.fromEntries(k.map(f => [f, str(a?.[f])]));
 };
+/** The delivery address. WooCommerce asks for a phone on it too: the shopper's phone goes with it
+ *  (the one typed for the delivery address if any, otherwise the billing phone). */
+const shippingAddress = (ship: Record<string, string> | undefined, bill: Record<string, string> | undefined) =>
+  ({ ...address(ship ?? bill, false), phone: str(ship?.phone) || str(bill?.phone) });
 
 export async function POST(req: Request) {
   let b: Body;
@@ -57,7 +61,7 @@ export async function POST(req: Request) {
         raw = await storeApi('/cart/extensions', { method: 'POST', json: { namespace: 'alara', data: { action: 'add_bundle', slot: Number(b.slot), choices: Object.fromEntries(Object.entries(b.choices ?? {}).map(([k, v]) => [str(k, 60), str(v, 100)])) } } });
         break;
       case 'customer':
-        raw = await storeApi('/cart/update-customer', { method: 'POST', json: { billing_address: address(b.billing, true), shipping_address: address(b.shipping ?? b.billing, false) } });
+        raw = await storeApi('/cart/update-customer', { method: 'POST', json: { billing_address: address(b.billing, true), shipping_address: shippingAddress(b.shipping, b.billing) } });
         break;
       case 'checkout': {
         const blocked = checkoutBlockedReason();
@@ -67,7 +71,7 @@ export async function POST(req: Request) {
           method: 'POST',
           json: {
             billing_address: address(b.billing, true),
-            shipping_address: address(b.shipping ?? b.billing, false),
+            shipping_address: shippingAddress(b.shipping, b.billing),
             customer_note: str(b.note, 2000),
             payment_method: 'cod',
             extensions: { alara: { customer_token: token, newsletter: !!b.newsletter, account_password: b.accountPassword ? str(b.accountPassword, 200) : null } },

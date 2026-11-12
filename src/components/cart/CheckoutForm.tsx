@@ -109,7 +109,7 @@ export default function CheckoutForm({ packaging, blocked }: { packaging: Packag
             <h3>Billing details</h3>
             <div className="co-fields">
               {addressFields(bill, setBill, 'billing')}
-              {field(bill, setBill, 'phone', 'Phone', { type: 'tel', wide: true, auto: 'billing tel' })}
+              {field(bill, setBill, 'phone', 'Phone', { required: true, type: 'tel', wide: true, auto: 'billing tel' })}
               {field(bill, setBill, 'email', 'Email address', { required: true, type: 'email', wide: true, auto: 'billing email' })}
             </div>
           </section>
