@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, use, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, use, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Cart } from '@/lib/cart';
 
 type Toast = { name: string; image: string } | null;
@@ -31,23 +31,40 @@ export default function CartProvider({ children }: { children: ReactNode }) {
   const [drawer, setDrawer] = useState(false);
   const [toast, setToast] = useState<Toast>(null);
 
-  useEffect(() => {
-    fetch('/api/cart').then(r => r.json()).then(d => { if (d.ok) setCart(d.cart); }).catch(() => {});
+  // Cart requests go to WooCommerce one at a time. A new shopper has no cart cookie yet: if the first
+  // load and an "Add to cart" ran side by side, WooCommerce would open two separate carts and the empty
+  // one could win (the bag then opened empty). In a queue, the first request sets the cookie for the rest.
+  const queue = useRef<Promise<unknown>>(Promise.resolve());
+  const pending = useRef(0);
+  const enqueue = useCallback(<T,>(task: () => Promise<T>) => {
+    const run = queue.current.then(task, task);
+    queue.current = run.catch(() => {});
+    return run;
   }, []);
 
-  const call: Ctx['call'] = useCallback(async (body: Record<string, unknown>) => {
-    setBusy(true); setError('');
-    try {
-      const res = await fetch('/api/cart', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      const d = await res.json();
-      if (d.cart) setCart(d.cart);
-      if (!d.ok) setError(d.message ?? 'Something went wrong.');
-      return d;
-    } catch {
-      setError('The shop could not be reached. Please try again.');
-      return { ok: false, message: 'The shop could not be reached. Please try again.' };
-    } finally { setBusy(false); }
-  }, []);
+  useEffect(() => {
+    enqueue(async () => {
+      const d = await fetch('/api/cart').then(r => r.json()).catch(() => null);
+      if (d?.ok) setCart(d.cart);
+      else setError(d?.message ?? 'The bag could not be loaded. Please refresh the page.');
+    });
+  }, [enqueue]);
+
+  const call: Ctx['call'] = useCallback((body: Record<string, unknown>) => {
+    pending.current++; setBusy(true); setError('');
+    return enqueue(async () => {
+      try {
+        const res = await fetch('/api/cart', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        const d = await res.json().catch(() => ({ ok: false, message: `The shop did not answer properly (error ${res.status}). Please try again.` }));
+        if (d.cart) setCart(d.cart);
+        if (!d.ok) setError(d.message ?? 'Something went wrong.');
+        return d;
+      } catch {
+        setError('The shop could not be reached. Please try again.');
+        return { ok: false, message: 'The shop could not be reached. Please try again.' };
+      } finally { if (--pending.current === 0) setBusy(false); }
+    });
+  }, [enqueue]);
 
   const add: Ctx['add'] = useCallback(async (id, opts = {}) => {
     const d = await call({ action: 'add', id, quantity: opts.quantity ?? 1, variation: opts.variation });

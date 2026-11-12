@@ -31,6 +31,7 @@ export default function CartDrawer() {
         <h3>Shopping bag</h3>
         {!c || c.items.length === 0 ? (
           <div className="bag-empty">
+            {error && <p className="bag-error" role="alert">{error}</p>}
             <p>No products in the cart.</p>
             <Link className="btn" href="/shop" onClick={() => setDrawer(false)}>Return to shop</Link>
           </div>
