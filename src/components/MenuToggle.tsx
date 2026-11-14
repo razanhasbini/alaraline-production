@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from '@/components/IntentLink';
 import { useEffect, useId, useState, type ReactNode } from 'react';
 import { Caret } from './Icons';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from '@/components/IntentLink';
 import { useRouter } from 'next/navigation';
 import { CompareIcon, EyeIcon, HeartIcon } from '../Icons';
 import { useCart } from './CartProvider';

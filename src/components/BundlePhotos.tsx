@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import type { Bundle } from '@/lib/alara';
-import { wpImage } from '@/lib/wp-image';
+import { srcSetOf, wpImage } from '@/lib/wp-image';
 
 /** The bundle's photos (1 or 2), deduplicated, as the live plugin does. */
 export const photosOf = (b: Bundle) =>
@@ -20,6 +20,16 @@ export default function BundlePhotos({ b, sizes, auto = false, eager = false, ho
   const photos = photosOf(b);
   const [index, setIndex] = useState(0);
   const [hovering, setHovering] = useState(false);
+  // The second photo is hidden until hover, swipe, a dot or the 30 s change: it downloads only then, or once the page
+  // has finished loading, so it never competes with the photos people see first.
+  const [armed, setArmed] = useState(eager);
+  useEffect(() => {
+    if (armed || photos.length < 2) return;
+    let t: ReturnType<typeof setTimeout> | undefined;
+    const later = () => { t = setTimeout(() => setArmed(true), 2500); };
+    if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
+    return () => { removeEventListener('load', later); clearTimeout(t); };
+  }, [armed, photos.length]);
   const startX = useRef<number | null>(null);
   const swiped = useRef(false);
 
@@ -29,7 +39,7 @@ export default function BundlePhotos({ b, sizes, auto = false, eager = false, ho
     return () => clearInterval(id);
   }, [auto, photos.length]);
 
-  const go = (i: number) => setIndex((i + photos.length) % photos.length);
+  const go = (i: number) => { setArmed(true); setIndex((i + photos.length) % photos.length); };
   // hovering shows "the other" photo, then goes back
   const shown = hovering && photos.length > 1 ? (index + 1) % photos.length : index;
 
@@ -37,9 +47,9 @@ export default function BundlePhotos({ b, sizes, auto = false, eager = false, ho
     <>
       <button type="button" className={className} aria-label={`View ${b.name} details`}
         onClick={() => { if (swiped.current) { swiped.current = false; return; } onOpen?.(); }}
-        onPointerEnter={e => { if (hover && e.pointerType === 'mouse') setHovering(true); }}
+        onPointerEnter={e => { setArmed(true); if (hover && e.pointerType === 'mouse') setHovering(true); }}
         onPointerLeave={() => setHovering(false)}
-        onPointerDown={e => { startX.current = e.clientX; }}
+        onPointerDown={e => { setArmed(true); startX.current = e.clientX; }}
         onPointerUp={e => {
           if (startX.current === null || photos.length < 2) return;
           const dx = e.clientX - startX.current; startX.current = null;
@@ -48,7 +58,9 @@ export default function BundlePhotos({ b, sizes, auto = false, eager = false, ho
         <span className="xb-media">
           {photos.map((p, i) => (
             <span key={p.src} className={`xb-slide${i === shown ? ' is-active' : ''}`} aria-hidden={i !== shown}>
-              <Image src={wpImage(p.src, 900)} alt={`${b.name} photo ${i + 1}`} fill sizes={sizes} draggable={false} loading={eager ? 'eager' : 'lazy'} />
+              {(i === 0 || i === shown || armed) && (
+                <Image src={wpImage(p.src, 900)} {...srcSetOf(p.src, 900)} alt={`${b.name} photo ${i + 1}`} fill sizes={sizes} draggable={false} loading={eager ? 'eager' : 'lazy'} />
+              )}
             </span>
           ))}
         </span>

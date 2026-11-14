@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/components/IntentLink';
 import { nav } from '@/lib/site';
 import HeaderIcons from './cart/HeaderIcons';
 import MenuToggle, { SubMenu } from './MenuToggle';

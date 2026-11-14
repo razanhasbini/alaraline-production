@@ -85,7 +85,7 @@ export function tube(loader: THREE.TextureLoader, aniso: number): Built {
   const cap = new THREE.Mesh(new THREE.CylinderGeometry(.155, .158, CAP, 48), softPlastic('#ffffff', { roughness: .3 }));
   cap.position.y = -L / 2 - CAP / 2; g.add(cap);
   const pw = .49, ph = pw * 733 / 292;
-  return withPhoto(g, L + .065 + CAP, loader, aniso, 'photo-tube.png', pw, ph, -L / 2 - CAP + ph / 2, .175);
+  return withPhoto(g, L + .065 + CAP, loader, aniso, 'photo-tube.webp', pw, ph, -L / 2 - CAP + ph / 2, .175);
 }
 
 // Buttered Up Mask: a frosted white jar, bowl-shaped, with a pink lid and pink print
@@ -101,16 +101,16 @@ export function jar(loader: THREE.TextureLoader, aniso: number): Built {
   }));
   g.add(base);
   // the print wraps the front of the jar
-  const printTex = loadTex(loader, 'jar-print.png', aniso);
+  const printTex = loadTex(loader, 'jar-print.webp', aniso);
   const print = new THREE.Mesh(new THREE.CylinderGeometry(.3618, .356, .15, 64, 1, true, -1.45, 2.9), new THREE.MeshLambertMaterial({ map: printTex, transparent: true, depthWrite: false }));
   print.position.y = -.08; g.add(print);
   // the top of the lid is the real one, from the photo of the open box (it stands upright in the tray, lid showing)
-  const lidMap = loadTex(loader, 'jar-lid-top.png', aniso);
+  const lidMap = loadTex(loader, 'jar-lid-top.webp', aniso);
   const lidTop = new THREE.Mesh(new THREE.CircleGeometry(.335, 96), new THREE.MeshBasicMaterial({ map: lidMap, transparent: true, toneMapped: false }));
   lidTop.rotation.x = -Math.PI / 2; lidTop.position.y = .2015; g.add(lidTop);
   g.children.forEach(m => { m.position.y += .068; });     // centre the jar on its height
   const pw = .744, ph = pw * 629 / 730;
-  return withPhoto(g, .535, loader, aniso, 'photo-jar.png', pw, ph, 0, null);
+  return withPhoto(g, .535, loader, aniso, 'photo-jar.webp', pw, ph, 0, null);
 }
 
 // The Miracle Pro Edition: square magenta glass, ribbed gold collar, white dropper
@@ -122,7 +122,7 @@ export function miracle(loader: THREE.TextureLoader, aniso: number): Built {
     attenuationColor: new THREE.Color('#a40d5e'), attenuationDistance: .5,
   }));
   g.add(glass);
-  const printTex = loadTex(loader, 'miracle-print.png', aniso);
+  const printTex = loadTex(loader, 'miracle-print.webp', aniso);
   const print = new THREE.Mesh(new THREE.PlaneGeometry(W, H), new THREE.MeshBasicMaterial({ map: printTex, transparent: true, depthWrite: false }));
   print.position.z = Dp / 2 + .002; g.add(print);
   // ribbed collar: a lathe with fine ridges
@@ -134,5 +134,5 @@ export function miracle(loader: THREE.TextureLoader, aniso: number): Built {
   const bulb = new THREE.Mesh(new THREE.CapsuleGeometry(.048, .1, 8, 32), softPlastic('#fbf8f7', { roughness: .35 }));
   bulb.position.y = H / 2 + .1 + .09; g.add(bulb);
   const k = W / 438, pw = 440 * k, ph = 921 * k;                 // the photo's glass is 438 px wide
-  return withPhoto(g, H + .29, loader, aniso, 'photo-miracle.png', pw, ph, -H / 2 + ph / 2, Dp / 2 + .004);
+  return withPhoto(g, H + .29, loader, aniso, 'photo-miracle.webp', pw, ph, -H / 2 + ph / 2, Dp / 2 + .004);
 }

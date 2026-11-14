@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/IntentLink';
 import ChristmasBundles from '@/components/ChristmasBundles';
 import CustomerLove from '@/components/CustomerLove';
 import { Elevate, Essentials, Features } from '@/components/HomeSections';

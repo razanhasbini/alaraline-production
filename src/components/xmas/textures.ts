@@ -54,7 +54,7 @@ function honeycomb(x: CanvasRenderingContext2D, ox: number, oy: number, r: numbe
 }
 
 export async function lidArt(): Promise<{ top: Art; flap: Art; inside: Art }> {
-  const [bee, logo] = await Promise.all([load(`/live/xmas/lid-bee.png`), load(`/live/xmas/logo-mask.png`)]);
+  const [bee, logo] = await Promise.all([load(`/live/xmas/lid-bee.webp`), load(`/live/xmas/logo-mask.webp`)]);
   const goldLogo = tinted(logo, GOLD), foilLogo = tinted(logo, '#fff');
   const foilBee = tinted(bee, '#fff');
 

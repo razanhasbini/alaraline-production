@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/components/IntentLink';
 import { essentials } from '@/lib/site';
-import { wpImage } from '@/lib/wp-image';
+import { srcSetOf, wpImage } from '@/lib/wp-image';
 
 // Static homepage sections, with the same text, images and links as the live Elementor page.
 
@@ -13,7 +13,7 @@ export function Essentials() {
         <div className="cats">
           {essentials.map(c => (
             <Link key={c.slug} className="cat" href={`/product-category/${c.slug}`}>
-              <span className="cat-img"><Image src={wpImage(c.img, 640)} alt="" fill sizes="(max-width: 1080px) 45vw, 300px" /></span>
+              <span className="cat-img"><Image src={wpImage(c.img, 640)} {...srcSetOf(c.img, 640)} alt="" fill sizes="(max-width: 1080px) 45vw, 300px" /></span>
               <h5>{c.name}</h5>
             </Link>
           ))}

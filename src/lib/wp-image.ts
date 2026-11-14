@@ -39,5 +39,25 @@ export function wpImage(src: string, width?: number): string {
 
   if (isPrivateHost(host)) return `${url.protocol}//${host}${path}`;
   if (!width) return host === (PHOTON.test(url.host) ? url.pathname.split('/')[1] : url.host) ? src : `https://${host}${path}`;
-  return `https://i0.wp.com/${host}${path}?w=${Math.round(width)}&ssl=1`;
+  // quality: without it Jetpack sends PNG photos as lossless WebP (~590 KB for one 900px bundle photo); with it the
+  // same photo is ~70 KB and looks the same (checked side by side, small print stays sharp)
+  return `https://i0.wp.com/${host}${path}?w=${Math.round(width)}&quality=${PHOTO_QUALITY}&ssl=1`;
+}
+
+const PHOTO_QUALITY = 85;
+const WIDTHS = [320, 480, 640, 800, 1000, 1200, 1600];
+
+/** Several widths of the same WordPress photo for <img srcSet> with `sizes`: the browser downloads only the one
+ *  that fits the screen (a phone card gets ~480px instead of 900px). Undefined when the photo isn't resizable. */
+export function wpSrcSet(src: string, max: number): string | undefined {
+  const urls = [...WIDTHS.filter(w => w < max), max].map(w => [wpImage(src, w), w] as const);
+  if (!urls[0][0].startsWith('https://i0.wp.com/')) return undefined;
+  return urls.map(([u, w]) => `${u} ${w}w`).join(', ');
+}
+
+/** The srcSet as a spreadable attribute for next/image (vinext passes it through to the <img>; Next's types leave
+ *  it out): <Image {...srcSetOf(src, 640)} … /> */
+export function srcSetOf(src: string, max: number): object {
+  const srcSet = wpSrcSet(src, max);
+  return srcSet ? { srcSet } : {};
 }

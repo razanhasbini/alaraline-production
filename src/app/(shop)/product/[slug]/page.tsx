@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import Link from '@/components/IntentLink';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import BuyBox from '@/components/BuyBox';

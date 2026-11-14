@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/IntentLink';
 
 // The theme's breadcrumb: "Home — Products — Category — Product", separated by short lines.
 export default function Crumbs({ items, bar = true }: { items: { label: string; href?: string }[]; bar?: boolean }) {

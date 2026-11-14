@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/IntentLink';
 import { notFound } from 'next/navigation';
 import Crumbs from './Crumbs';
 import ListingView from './ListingView';

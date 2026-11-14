@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import type { Img } from '@/lib/woo';
-import { wpImage } from '@/lib/wp-image';
+import { srcSetOf, wpImage } from '@/lib/wp-image';
 
 export default function Gallery({ images, name }: { images: Img[]; name: string }) {
   const [i, setI] = useState(0);
@@ -12,7 +12,7 @@ export default function Gallery({ images, name }: { images: Img[]; name: string 
   return (
     <div className="gallery">
       <div className="gallery-main">
-        <Image src={wpImage(main.src, 1200)} alt={main.alt || name} fill priority sizes="(max-width: 900px) 100vw, 50vw" />
+        <Image src={wpImage(main.src, 1200)} {...srcSetOf(main.src, 1200)} alt={main.alt || name} fill priority sizes="(max-width: 900px) 100vw, 50vw" />
       </div>
       {images.length > 1 && (
         <div className="thumbs">
