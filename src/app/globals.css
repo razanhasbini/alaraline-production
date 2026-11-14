@@ -191,8 +191,10 @@ ul { padding: 0; list-style: none; }
   box-shadow: 0 10px 22px -18px rgba(110, 26, 55, .45); }
 .xb-photo { display: block; width: 100%; padding: 0; background: #fff; cursor: pointer; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
 .xb-media { position: relative; display: block; aspect-ratio: 1 / 1; overflow: hidden; background: #fff; }
-.xb-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .55s ease; }
-.xb-slide.is-active { opacity: 1; }
+/* the two photos never show at the same time (they are framed differently, so a cross-fade looked like a double
+   exposure): the old one fades out to the white card, then the new one fades in */
+.xb-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .18s ease; }
+.xb-slide.is-active { opacity: 1; transition: opacity .34s ease .16s; }
 .xb-slide img { object-fit: cover; object-position: center top; pointer-events: none; transform-origin: center top; transition: transform .9s cubic-bezier(.22, 1, .36, 1); }
 /* Christmas bundle photos (cards + pop-up): the whole picture with a little air around it, never cropped.
    !important because the Cloudflare image component writes object-fit: cover inline on fill images. */

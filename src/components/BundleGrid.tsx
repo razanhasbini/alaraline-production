@@ -30,7 +30,7 @@ export default function BundleGrid({ items, symbol, prBoxPrice }: Props) {
       <div className="xb-grid">
         {items.map(b => (
           <article key={b.slot} className="xb-card">
-            <BundlePhotos b={b} className="xb-photo" sizes="(max-width: 760px) 45vw, 300px" auto hover onOpen={() => show(b)} />
+            <BundlePhotos b={b} className="xb-photo" sizes="(max-width: 760px) 46vw, 340px" auto hover onOpen={() => show(b)} />
             <div className="xb-info">
               <h3 className="xb-name">{b.name}</h3>
               <BundlePrice b={b} symbol={symbol} />

@@ -41,9 +41,10 @@ export const footer = {
   ],
   contact: { email: 'Info@alaraline.co', phone: '+961 81 624 204', tel: '+96181624204', place: 'Baabda, Lebanon' },
   socials: [
-    { label: 'Facebook', href: 'https://www.facebook.com/Alaralineofficial' },
+    // the brand's own profiles (share-tracking parameters such as ?srtk= and ?_t= left off)
+    { label: 'Facebook', href: 'https://www.facebook.com/Alaralineofficial/' },
     { label: 'Instagram', href: 'https://www.instagram.com/alaraline_lb/' },
-    { label: 'TikTok', href: 'https://www.tiktok.com/search?q=alaraline' },
+    { label: 'TikTok', href: 'https://www.tiktok.com/@alara_line.lb' },
     { label: 'WhatsApp', href: 'https://wa.me/96181624204' },
   ],
 };
