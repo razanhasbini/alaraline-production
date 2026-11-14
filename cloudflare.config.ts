@@ -14,6 +14,10 @@ export default defineConfig({
     compatibilityDate: "2026-11-12",
     workersDev: true,
     previewUrls: true,
+    // LAUNCH: the public address. Merge this only at cutover, after the alaraline.co A/AAAA records were removed
+    // in Cloudflare DNS (a custom domain cannot sit on top of an existing record). www.alaraline.co is a proxied
+    // record + a Cloudflare Redirect Rule to alaraline.co (see CLOUDFLARE_DEPLOYMENT.md, "Launch").
+    domains: ["alaraline.co"],
     assets: {
       htmlHandling: "none",
       notFoundHandling: "none",
