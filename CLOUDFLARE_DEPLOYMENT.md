@@ -126,9 +126,11 @@ itself is damaged: it would delete the orders placed since.
 
 ## Speed and resilience
 
-- Warm-up: `npm run deploy:vinext` ends with `scripts/warm.mjs`, which visits every sitemap page once (one every
-  0.5 s, about 40 s), so the first customers after a deploy get cached pages. It never fails the deploy
-  (`npm run warm` to run it by hand).
+- Hostinger's server limits requests per address: a burst from Cloudflare (all shoppers share a few Cloudflare
+  addresses) gets "429" for about 10 minutes. Ask Hostinger to allow Cloudflare's IP ranges
+  (https://www.cloudflare.com/ips/) for alaraline.co / shop.alaraline.co.
+- Warm-up is manual and slow on purpose (`npm run warm`, one page every 3 s); it is not run on deploy, because a
+  burst right after a deploy trips that limit.
 - Saved copies: every WordPress read keeps its last good answer (`src/lib/fallback.ts`, KV keys `alara-lastgood:*`).
   If WordPress is busy or down, pages show the shop from that copy; a page with no copy shows "One moment, please".
 - Images served from this site are pre-sized (vinext does not resize): hero textures and the logo are WebP.

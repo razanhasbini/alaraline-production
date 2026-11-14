@@ -1,6 +1,7 @@
-// Warm-up after a deploy: visits every page in the sitemap once, gently (one page every half second), so the
-// first customers after an update get fast pages and the saved WordPress copies are filled.
-// Runs after `npm run deploy:vinext`; never fails the deploy. Usage: node scripts/warm.mjs [base-url]
+// Manual warm-up: visits every page in the sitemap once, slowly (one page every 3 seconds), so the
+// first customers after an update get fast pages and the saved WordPress copies are filled. NOT run on deploy:
+// a burst of requests from Cloudflare trips Hostinger's server-level per-address limit (429) for ~10 minutes.
+// Usage: npm run warm [base-url]
 // Base URL: argument, or WARM_URL, or the workers.dev address. (Only ever the new website, never WordPress.)
 
 const base = (process.argv[2] || process.env.WARM_URL || 'https://alaraline-frontend.noisy-dawn-98ec.workers.dev').replace(/\/$/, '');
@@ -29,7 +30,7 @@ async function main() {
     if (r.status >= 200 && r.status < 400) ok++;
     if (r.ms > 2000) slow++;
     if (r.status === 0 || r.status >= 500) console.log(`[warm] ${p} → ${r.status || r.error}`);
-    await sleep(500);
+    await sleep(3000);
   }
   console.log(`[warm] done: ${ok}/${paths.length} ok, ${slow} took over 2 s (first render)`);
 }
