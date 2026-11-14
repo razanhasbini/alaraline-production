@@ -83,6 +83,15 @@ ul { padding: 0; list-style: none; }
 .nav a { display: flex; align-items: center; gap: 6px; padding: 12px 0; font: 400 13px/1.4 var(--font-sans); letter-spacing: 1.2px; text-transform: uppercase; color: #000; }
 .nav a:hover { color: var(--pink); }
 .nav .sub a { padding: 8px 0 8px 14px; text-transform: none; letter-spacing: 0; font-size: 15px; }
+/* phones: "Shop" is a closed row that opens on tap (its link and hover dropdown are for desktop) */
+.nav .nav-desk { display: none; }
+.sub-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; padding: 12px 0;
+  font: 400 13px/1.4 var(--font-sans); letter-spacing: 1.2px; text-transform: uppercase; color: #000; }
+.sub-toggle svg { width: 12px; height: 12px; margin-right: 4px; transition: transform .25s; }
+.is-expanded > .sub-toggle { color: var(--pink); }
+.is-expanded > .sub-toggle svg { transform: rotate(180deg); }
+.nav .has-sub:not(.is-expanded) .sub { display: none; }
+.nav .has-sub .sub { padding-bottom: 6px; margin-left: 2px; border-left: 1px solid #f1d5e1; }
 .logo { justify-self: start; }
 .logo img { width: 66px; height: auto; }
 .header-actions { display: flex; justify-content: flex-end; align-items: center; }
@@ -109,6 +118,9 @@ ul { padding: 0; list-style: none; }
     opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .25s ease, transform .25s ease, visibility .25s; }
   .nav .has-sub:hover .sub, .nav .has-sub:focus-within .sub { opacity: 1; visibility: visible; transform: none; }
   .nav .sub a { padding: 7px 0; }
+  .nav .nav-desk { display: flex; }
+  .sub-toggle, .nav .sub .nav-mob { display: none; }
+  .nav .has-sub:not(.is-expanded) .sub, .nav .has-sub .sub { display: block; margin-left: 0; padding-bottom: 14px; border-left: 0; }
   .logo { grid-column: 2; grid-row: 1; justify-self: center; }
   .logo img { width: 110px; }
   .header-actions { grid-column: 3; grid-row: 1; gap: 14px; }
@@ -186,9 +198,9 @@ ul { padding: 0; list-style: none; }
    !important because the Cloudflare image component writes object-fit: cover inline on fill images. */
 .xb-card .xb-media { aspect-ratio: 4 / 3; }
 .xb-slide img { object-fit: contain !important; object-position: center !important; transform-origin: center; padding: 3%; }
-/* the second photo (gift bag + box) is cropped through the bag in the top-left corner: pin it to the card's
-   top-left edges with no air, so the bag runs off the card like a real crop (the whole box stays visible) */
-.xb-card .xb-slide:nth-child(2) img { padding: 0; object-position: left top !important; transform-origin: left top; }
+/* the second photo (gift bag + box) fills the whole card with no white band: pinned to the left and bottom edges,
+   so the box and products stay whole and the bag runs off the top-left corner like a real crop */
+.xb-card .xb-slide:nth-child(2) img { padding: 0; object-fit: cover !important; object-position: left bottom !important; transform-origin: left bottom; }
 .xb-sheet-media .xb-slide img { padding: 0; } /* square photo in a square frame: already whole, no extra air needed */
 .xb-dots { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 17px; padding: 6px 0 3px; background: #fff; }
 .xb-dots button { width: 6px; height: 6px; padding: 0; border-radius: 50%; background: #d9c6cd; transition: background .25s, transform .25s; }

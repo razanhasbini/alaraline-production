@@ -29,13 +29,16 @@ function listStore(key: string, max: number) {
     get: read,
     server: () => EMPTY,
     toggle(id: number) { const ids = read(); write(ids.includes(id) ? ids.filter(x => x !== id) : [...ids, id]); },
+    /** Adds the id if it isn't there yet. A full list drops its oldest product to make room. */
+    add(id: number) { const ids = read(); if (!ids.includes(id)) write([...ids, id]); },
     remove(id: number) { write(read().filter(x => x !== id)); },
     clear() { write([]); },
   };
 }
 
+export const COMPARE_MAX = 4;
 const wish = listStore('alara_wishlist', 100);
-const compare = listStore('alara_compare', 4);
+const compare = listStore('alara_compare', COMPARE_MAX);
 
 export function useWishlist() {
   const ids = useSyncExternalStore(wish.subscribe, wish.get, wish.server);
@@ -44,5 +47,5 @@ export function useWishlist() {
 
 export function useCompare() {
   const ids = useSyncExternalStore(compare.subscribe, compare.get, compare.server);
-  return { ids, has: (id: number) => ids.includes(id), toggle: compare.toggle, remove: compare.remove, clear: compare.clear };
+  return { ids, has: (id: number) => ids.includes(id), toggle: compare.toggle, add: compare.add, remove: compare.remove, clear: compare.clear };
 }

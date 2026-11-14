@@ -61,7 +61,8 @@ export default function BuyBox({ id, name, image, type, inStock, purchasable, at
         </>
       )}
       <div className="buy-links">
-        <button type="button" onClick={() => cmp.toggle(id)} aria-pressed={cmp.has(id)}><CompareIcon /> {cmp.has(id) ? 'Added to compare' : 'Compare'}</button>
+        {/* adds this product and opens the comparison table, where more products can be picked */}
+        <button type="button" onClick={() => { cmp.add(id); router.push('/compare'); }}><CompareIcon /> Compare</button>
         <button type="button" onClick={() => wish.toggle(id)} aria-pressed={wish.has(id)}><HeartIcon /> {wish.has(id) ? 'In your wishlist' : 'Add to wishlist'}</button>
       </div>
     </div>

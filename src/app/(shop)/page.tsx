@@ -58,7 +58,7 @@ async function Offers() {
   return (
     <section className="psec">
       <div className="wrap">
-        <ProductTabs id="offers" titles={['Offers']} panels={[<Grid key="o" products={products} />]} />
+        <ProductTabs id="offers" titles={['Limited Offers']} panels={[<Grid key="o" products={products} />]} />
       </div>
     </section>
   );

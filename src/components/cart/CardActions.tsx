@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { CompareIcon, EyeIcon, HeartIcon } from '../Icons';
 import { useCart } from './CartProvider';
 import { useCompare, useWishlist } from './Wishlist';
@@ -9,12 +10,14 @@ import { useCompare, useWishlist } from './Wishlist';
 export default function CardActions({ id, name, slug, image, quickAdd, inStock }: { id: number; name: string; slug: string; image: string; quickAdd: boolean; inStock: boolean }) {
   const { add, busy } = useCart();
   const wish = useWishlist(), cmp = useCompare();
+  const router = useRouter();
   const href = `/product/${slug}`;
   return (
     <>
       <div className="card-icons">
         <button type="button" aria-pressed={wish.has(id)} aria-label={wish.has(id) ? 'Remove from wishlist' : 'Add to wishlist'} onClick={() => wish.toggle(id)} className={wish.has(id) ? 'is-on' : undefined}><HeartIcon /></button>
-        <button type="button" aria-pressed={cmp.has(id)} aria-label={cmp.has(id) ? 'Remove from compare' : 'Compare'} onClick={() => cmp.toggle(id)} className={cmp.has(id) ? 'is-on' : undefined}><CompareIcon /></button>
+        {/* adds the product and opens the comparison table, where more products can be picked */}
+        <button type="button" aria-label={`Compare ${name}`} onClick={() => { cmp.add(id); router.push('/compare'); }} className={cmp.has(id) ? 'is-on' : undefined}><CompareIcon /></button>
         <Link href={href} aria-label={`Quick view ${name}`}><EyeIcon /></Link>
       </div>
       {quickAdd
