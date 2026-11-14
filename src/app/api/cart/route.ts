@@ -91,7 +91,8 @@ export async function POST(req: Request) {
 }
 
 function fail(e: unknown) {
-  if (!(e instanceof CartError)) console.error('[cart] unexpected error', e);
+  // the error's type and message only (no request body, cookies or customer details)
+  if (!(e instanceof CartError)) console.error(JSON.stringify({ t: new Date().toISOString(), wp: 'cart route', status: 500, error: `${(e as Error)?.name ?? 'Error'}: ${String((e as Error)?.message ?? e).slice(0, 160)}` }));
   const err = e instanceof CartError ? e : new CartError('Something went wrong on our side. Please refresh the page and try again.', 500);
   return NextResponse.json({ ok: false, message: err.message, code: err.code }, { status: err.status });
 }

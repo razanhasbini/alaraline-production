@@ -1,5 +1,6 @@
 import 'server-only';
 import { cookies } from 'next/headers';
+import { logWp, noteRateLimit, retryAfterMs } from './wp-fetch';
 
 // The shopper's cart, checkout and account all run through WooCommerce's official Store API
 // (/wp-json/wc/store/v1). WooCommerce keeps doing all the real work: prices, stock, promo codes,
@@ -33,20 +34,37 @@ export async function storeApi<T = RawCart>(path: string, init: { method?: strin
   // this request's cart id + security nonce (updated as WooCommerce hands out new ones)
   const ids = { token: jar.get(CART)?.value, nonce: jar.get(NONCE)?.value };
 
+  // Reads (GET) are retried on a temporary failure (dropped connection, 429, 5xx) with bounded exponential backoff
+  // that honours Retry-After. Changes (add, update, coupon, checkout…) are sent ONCE: if the connection drops after
+  // sending, WooCommerce may already have applied it, so the shopper is asked to check instead of us repeating it.
   const send = async (m: string, p: string, json?: unknown) => {
     const headers: Record<string, string> = { Accept: 'application/json' };
     if (ids.token) headers['Cart-Token'] = ids.token;
     if (ids.nonce) headers.Nonce = ids.nonce;
     if (json !== undefined) headers['Content-Type'] = 'application/json';
+    const retries = m === 'GET' ? 2 : 0;
     let res: Response | null = null;
-    for (let i = 0; i < (m === 'GET' ? 3 : 1); i++) {
-      if (i) await new Promise(r => setTimeout(r, 400 * i));
+    for (let attempt = 0; ; attempt++) {
       try {
         res = await fetch(`${STORE}${p}`, { method: m, headers, body: json === undefined ? undefined : JSON.stringify(json), cache: 'no-store' });
-        if (res.status < 500) break;
-      } catch { res = null; }
+      } catch (e) {
+        res = null;
+        logWp('warn', `cart ${m} ${p}`, 0, null, { attempt, error: (e as Error).message.slice(0, 120) });
+      }
+      const temporary = !res || res.status === 429 || res.status >= 500;
+      if (res?.status === 429) noteRateLimit(res);
+      if (!temporary || attempt >= retries) break;
+      const told = retryAfterMs(res);
+      if (told !== null && told > 2500) break; // too long to keep the shopper waiting
+      res?.body?.cancel().catch(() => {});
+      await new Promise(r => setTimeout(r, told ?? Math.min(2500, 300 * 2 ** attempt) * (0.75 + Math.random() * 0.5)));
     }
-    if (!res) throw new CartError('The shop could not be reached. Please try again.', 503);
+    if (!res) {
+      if (m === 'GET') throw new CartError('The shop could not be reached. Please try again.', 503);
+      throw new CartError(p === '/checkout'
+        ? 'We could not confirm your order because the connection dropped. Please check your email or My Account before trying again, so you are not charged twice.'
+        : 'The connection dropped. Please check your bag before trying again.', 503, 'connection_lost');
+    }
     // WooCommerce hands back (or renews) the cart id and the security nonce on every response
     const newToken = res.headers.get('cart-token'), newNonce = res.headers.get('nonce');
     if (newToken && newToken !== ids.token) { ids.token = newToken; jar.set(CART, newToken, { httpOnly: true, sameSite: 'lax', secure, path: '/', maxAge: MONTH }); }
@@ -55,18 +73,21 @@ export async function storeApi<T = RawCart>(path: string, init: { method?: strin
   };
 
   // WooCommerce's answer as JSON. A PHP notice printed by a plugin before the JSON would break a plain
-  // res.json(), so anything before the first { or [ is skipped. Unreadable answers are logged (Worker logs).
+  // res.json(), so anything before the first { or [ is skipped. Unreadable answers are logged by status, headers
+  // and length only: the body may hold the shopper's cart, address or phone, so it is never logged.
   type Answer = (T & { code?: string; message?: string }) | null;
   const read = async (r: Response, p: string): Promise<Answer> => {
     const text = await r.text().catch(() => '');
     try { return JSON.parse(text); } catch { /* try below */ }
     const start = text.search(/[{[]/);
     if (start > 0) { try { return JSON.parse(text.slice(start)); } catch { /* logged below */ } }
-    console.error(`[cart] WooCommerce answered ${r.status} without readable JSON on ${p}:`, text.slice(0, 600));
+    // (an error status is logged once below; an unreadable "OK" answer is the surprising case worth its own line)
+    if (r.ok) logWp('error', `cart ${method} ${p}`, r.status, r, { problem: 'unreadable JSON', bytes: text.length });
     return null;
   };
 
-  // changes need a nonce: get one first if this shopper has none yet, and once more if it expired
+  // changes need a nonce: get one first if this shopper has none yet, and once more if it expired. Re-sending after
+  // a 401 "invalid nonce" is safe: WooCommerce rejects the request before doing anything, so nothing is duplicated.
   if (method !== 'GET' && !ids.nonce) await send('GET', '/cart');
   let res = await send(method, path, init.json);
   let data = await read(res, path);
@@ -76,7 +97,8 @@ export async function storeApi<T = RawCart>(path: string, init: { method?: strin
     data = await read(res, path);
   }
   if (!res.ok) {
-    console.error(`[cart] ${method} ${path} → ${res.status}`, data?.code ?? '', data?.message ?? '');
+    // WooCommerce's error code only: its message can contain the shopper's email or address
+    logWp(res.status >= 500 || res.status === 429 ? 'error' : 'warn', `cart ${method} ${path}`, res.status, res, { code: data?.code ?? '' });
     const fallback = res.status === 429
       ? 'The shop is very busy right now. Please wait a minute and try again.'
       : `The shop had a problem (error ${res.status}). Please try again.`;

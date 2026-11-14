@@ -1,6 +1,8 @@
 import 'server-only';
 import { cacheLife, cacheTag } from 'next/cache';
 import { recall, remember } from './fallback';
+import { CATALOG_CACHE } from './woo';
+import { inCooldown, logWp, wpGetJson } from './wp-fetch';
 
 // Data from the "ÀLara Headless API" WordPress plugin (wp-plugins/alara-headless-api).
 // If the plugin isn't installed yet, these return null and the sections simply don't render.
@@ -34,25 +36,21 @@ export type Packaging = {
   pr_box?: { name: string; image: BundleImage | null; image_open: BundleImage | null };
 };
 
-/** A read from the ÀLara Headless API; if WordPress can't answer, the last good answer is used (see fallback.ts). */
+/** A read from the ÀLara Headless API (wp-fetch.ts: shared, gentle, backoff); right after a 429, or if WordPress
+ *  can't answer, the last good answer is used (fallback.ts). */
 async function alara<T>(path: string): Promise<T | null> {
-  try {
-    const res = await fetch(`${WC}/wp-json/alara/v1/${path}`, { headers: { Accept: 'application/json' } });
-    if (res.ok) {
-      const data = (await res.json()) as T;
-      await remember(`alara:${path}`, data);
-      return data;
-    }
-    console.warn(`[alara] ${path} → ${res.status}`);
-  } catch (e) {
-    console.warn(`[alara] ${path} →`, (e as Error).message);
-  }
-  return (await recall<T>(`alara:${path}`)) ?? null;
+  const key = `alara:${path}`;
+  if (inCooldown()) { const saved = await recall<T>(key); if (saved !== undefined) return saved; }
+  const r = await wpGetJson<T>(`${WC}/wp-json/alara/v1/${path}`, `alara ${path}`, { retries: 2 });
+  if (r.ok) { await remember(key, r.data); return r.data; }
+  const saved = await recall<T>(key);
+  if (saved !== undefined) logWp('warn', `alara ${path}`, r.status, null, { served: 'saved copy' });
+  return saved ?? null;
 }
 
 export async function getBundles(): Promise<Bundles | null> {
   'use cache';
-  cacheLife('hours');
+  cacheLife(CATALOG_CACHE);
   cacheTag('bundles', 'products');
   const live = await alara<Bundles>('bundles');
   if (live) return live;
@@ -66,7 +64,7 @@ export type ClientResult = { id: number; before: ResultPhoto; after: ResultPhoto
 /** The Results Wall, managed in wp-admin → Client Results. */
 export async function getResults(): Promise<ClientResult[] | null> {
   'use cache';
-  cacheLife('hours');
+  cacheLife(CATALOG_CACHE);
   cacheTag('results');
   const live = await alara<{ items: ClientResult[] }>('results');
   if (live) return live.items;
@@ -76,7 +74,7 @@ export async function getResults(): Promise<ClientResult[] | null> {
 
 export async function getPackaging(): Promise<Packaging | null> {
   'use cache';
-  cacheLife('hours');
+  cacheLife(CATALOG_CACHE);
   cacheTag('packaging');
   const live = await alara<Packaging>('packaging');
   if (live) return live;

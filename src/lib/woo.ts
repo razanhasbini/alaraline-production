@@ -1,6 +1,12 @@
 import 'server-only';
 import { cacheLife, cacheTag } from 'next/cache';
 import { recall, remember } from './fallback';
+import { inCooldown, logWp, wpGetJson } from './wp-fetch';
+
+/** Catalog data is refreshed every 6 hours (not hourly) to stay well inside the Workers Free KV write allowance
+ *  (~1,000/day). Edits made in this site's /admin refresh at once (updateTag); cart and checkout always use live
+ *  WooCommerce prices and stock. */
+export const CATALOG_CACHE = { stale: 300, revalidate: 6 * 3600, expire: 3 * 86400 };
 
 // The only module that talks to WordPress. WooCommerce stays the source of truth for products and prices;
 // nothing here is hardcoded. Results are cached for an hour (and can be refreshed on demand by tag later).
@@ -62,53 +68,35 @@ type StoreProduct = {
 };
 
 /**
- * A WooCommerce Store API read. A server error or dropped connection is tried once more; "429 too many requests"
- * is never repeated (asking again only makes the limit worse). If WordPress still can't answer, the last good
- * answer is used (see fallback.ts), so the shop shows instead of an error page.
+ * A read-only catalog request with the saved-copy fallback (fallback.ts), made through wp-fetch.ts (shared
+ * in-flight requests, max 4 at once, bounded backoff honouring Retry-After). Right after a 429 the saved copy is
+ * used without asking WordPress again. Only if there is no saved copy at all does the page fail (friendly notice).
  */
-async function store<T>(path: string): Promise<T> {
-  let last = '';
-  for (let attempt = 0; attempt < 2; attempt++) {
-    if (attempt) await new Promise(r => setTimeout(r, 600));
-    try {
-      const res = await fetch(`${STORE}${path}`, { headers: { Accept: 'application/json' } });
-      if (res.ok) {
-        const data = (await res.json()) as T;
-        await remember(`store:${path}`, data);
-        return data;
-      }
-      last = String(res.status);
-      if (res.status < 500) break; // 4xx, including 429: don't ask again
-    } catch (e) {
-      last = (e as Error).message;
-    }
+async function catalogRead<T>(key: string, url: string, what: string, headers?: Record<string, string>): Promise<T | undefined> {
+  if (inCooldown()) {
+    const saved = await recall<T>(key);
+    if (saved !== undefined) return saved;
   }
-  const saved = await recall<T>(`store:${path}`);
-  if (saved !== undefined) {
-    console.warn(`[woo] ${path} → ${last}; showing the last saved copy`);
-    return saved;
-  }
-  throw new Error(`WooCommerce ${path} → ${last}`);
+  const r = await wpGetJson<T>(url, what, { headers, retries: 2 });
+  if (r.ok) { await remember(key, r.data); return r.data; }
+  const saved = await recall<T>(key);
+  if (saved !== undefined) logWp('warn', what, r.status, null, { served: 'saved copy' });
+  return saved;
 }
 
-/** A read with the read-only REST key (product meta, publish dates), with the same last-good-copy fallback. */
+/** A WooCommerce Store API read (public). */
+async function store<T>(path: string): Promise<T> {
+  const data = await catalogRead<T>(`store:${path}`, `${STORE}${path}`, `store ${path}`);
+  if (data === undefined) throw new Error(`WooCommerce ${path} unavailable`);
+  return data;
+}
+
+/** A read with the read-only REST key (product meta, publish dates). The key travels in a header, never logged. */
 async function restRead<T>(path: string): Promise<T | null> {
   const key = process.env.WC_CONSUMER_KEY, secret = process.env.WC_CONSUMER_SECRET;
   if (!key || !secret) return null;
-  try {
-    const res = await fetch(`${WC}/wp-json/wc/v3${path}`, {
-      headers: { Authorization: `Basic ${Buffer.from(`${key}:${secret}`).toString('base64')}` },
-    });
-    if (res.ok) {
-      const data = (await res.json()) as T;
-      await remember(`rest:${path}`, data);
-      return data;
-    }
-    console.warn(`[woo] REST ${path} → ${res.status}`);
-  } catch (e) {
-    console.warn(`[woo] REST ${path} →`, (e as Error).message);
-  }
-  return (await recall<T>(`rest:${path}`)) ?? null;
+  const auth = { Authorization: `Basic ${Buffer.from(`${key}:${secret}`).toString('base64')}` };
+  return (await catalogRead<T>(`rest:${path}`, `${WC}/wp-json/wc/v3${path}`, `rest ${path}`, auth)) ?? null;
 }
 
 function toProduct(p: StoreProduct): Product {
@@ -145,7 +133,7 @@ function toProduct(p: StoreProduct): Product {
 /** Publish dates (the public Store API doesn't include them); used for the "New" badge. */
 async function getPublishDates(): Promise<Record<number, string>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife(CATALOG_CACHE);
   cacheTag('products');
   const list = await restRead<{ id: number; date_created_gmt: string }[]>('/products?per_page=100&_fields=id,date_created_gmt');
   return Object.fromEntries((list ?? []).map(p => [p.id, p.date_created_gmt]));
@@ -167,7 +155,7 @@ const SORTS: Record<SortKey, [string, string]> = {
 /** Newest first by default, like the theme's product grids and tabs on the live homepage. */
 export async function getProducts(opts: { category?: string; perPage?: number; sort?: SortKey } = {}): Promise<Product[]> {
   'use cache';
-  cacheLife('hours');
+  cacheLife(CATALOG_CACHE);
   cacheTag('products');
   const [orderby, order] = SORTS[opts.sort ?? 'date'];
   const q = new URLSearchParams({ per_page: String(opts.perPage ?? 100), orderby, order });
@@ -178,7 +166,7 @@ export async function getProducts(opts: { category?: string; perPage?: number; s
 
 export async function getProduct(slug: string): Promise<Product | null> {
   'use cache';
-  cacheLife('hours');
+  cacheLife(CATALOG_CACHE);
   cacheTag('products', `product:${slug}`);
   const list = await store<StoreProduct[]>(`/products?slug=${encodeURIComponent(slug)}`);
   // a variation can share its parent's slug (live: The All-In Set); always take the product itself
@@ -188,7 +176,7 @@ export async function getProduct(slug: string): Promise<Product | null> {
 
 export async function getCategories(): Promise<Category[]> {
   'use cache';
-  cacheLife('hours');
+  cacheLife(CATALOG_CACHE);
   cacheTag('categories');
   const list = await store<{ id: number; slug: string; name: string; count: number; image: { src: string; alt: string } | null }[]>(
     '/products/categories?per_page=100',
@@ -204,7 +192,7 @@ export async function getCategories(): Promise<Category[]> {
  */
 export async function getProductTabs(id: number): Promise<Tab[]> {
   'use cache';
-  cacheLife('hours');
+  cacheLife(CATALOG_CACHE);
   cacheTag('products', `tabs:${id}`);
   const data = await restRead<{ meta_data: { key: string; value: unknown }[] }>(`/products/${id}?_fields=meta_data`);
   const raw = data?.meta_data?.find(m => m.key === 'wb_custom_tabs')?.value;
@@ -230,7 +218,7 @@ export type Review = { id: number; reviewer: string; rating: number; review: str
 /** Published product reviews (public Store API). */
 export async function getReviews(productId: number): Promise<Review[]> {
   'use cache';
-  cacheLife('hours');
+  cacheLife(CATALOG_CACHE);
   cacheTag('reviews', `reviews:${productId}`);
   try {
     const list = await store<{ id: number; reviewer: string; rating: number; review: string; date_created: string }[]>(`/products/reviews?product_id=${productId}&per_page=20`);

@@ -59,9 +59,12 @@ export default function CartProvider({ children }: { children: ReactNode }) {
         if (d.cart) setCart(d.cart);
         if (!d.ok) {
           setError(d.message ?? 'Something went wrong.');
-          // a change can go through even when its answer was lost: show the cart as WooCommerce has it now
-          const now = await fetch('/api/cart').then(r => r.json()).catch(() => null);
-          if (now?.ok) setCart(now.cart);
+          // a change can go through even when its answer was lost: show the cart as WooCommerce has it now.
+          // Not after a 429 ("too many requests"): nothing reached WooCommerce, and asking again adds load.
+          if (res.status !== 429) {
+            const now = await fetch('/api/cart').then(r => r.json()).catch(() => null);
+            if (now?.ok) setCart(now.cart);
+          }
         }
         return d;
       } catch {
