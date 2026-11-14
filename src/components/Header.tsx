@@ -23,7 +23,7 @@ export default function Header() {
           ))}
         </MenuToggle>
         <Link className="logo" href="/" aria-label="ÀLara Line home">
-          <Image src="/img/brand/alara-logo.png" alt="ÀLara Line" width={800} height={412} priority sizes="(min-width: 1200px) 110px, 66px" />
+          <Image src="/img/brand/alara-logo.webp" alt="ÀLara Line" width={440} height={227} priority unoptimized />
         </Link>
         <HeaderIcons />
       </div>

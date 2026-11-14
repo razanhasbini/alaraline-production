@@ -14,7 +14,6 @@ export const nav: { label: string; href: string; children?: { label: string; hre
       { label: 'Hair Care', href: '/product-category/hair-care' },
       { label: 'Curls On Collection', href: '/product-category/curls-on-collection' },
       { label: 'Hair Accessories', href: '/product-category/hair-accessories' },
-      { label: 'Body Care', href: '/product-category/body-care' },
     ],
   },
   { label: 'Our Story', href: '/about' },
@@ -26,12 +25,11 @@ export const nav: { label: string; href: string; children?: { label: string; hre
 ];
 
 export const footer = {
-  // The live footer sends Hair Care, Hair Accessories and Body Care to /shop/; these go to their own categories instead.
+  // Each goes to its own category page. (Body Care was discontinued; old links redirect to /shop.)
   shop: [
     { label: 'Hair Care', href: '/product-category/hair-care' },
     { label: 'Limited Offers', href: '/product-category/offers' },
     { label: 'Hair Accessories', href: '/product-category/hair-accessories' },
-    { label: 'Body Care', href: '/product-category/body-care' },
   ],
   quick: [
     { label: 'FAQ', href: '/faqs' },

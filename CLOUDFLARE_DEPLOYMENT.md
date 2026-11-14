@@ -124,6 +124,15 @@ Rollback: detach the custom domain, restore the exported DNS records, set `home`
 `https://alaraline.co` (move files back if they were moved). Never restore the database backup unless the database
 itself is damaged: it would delete the orders placed since.
 
+## Speed and resilience
+
+- Warm-up: `npm run deploy:vinext` ends with `scripts/warm.mjs`, which visits every sitemap page once (one every
+  0.5 s, about 40 s), so the first customers after a deploy get cached pages. It never fails the deploy
+  (`npm run warm` to run it by hand).
+- Saved copies: every WordPress read keeps its last good answer (`src/lib/fallback.ts`, KV keys `alara-lastgood:*`).
+  If WordPress is busy or down, pages show the shop from that copy; a page with no copy shows "One moment, please".
+- Images served from this site are pre-sized (vinext does not resize): hero textures and the logo are WebP.
+
 ## Free-tier check (measured on the build)
 
 Server code ~0.72 MB gzipped (limit 3 MB). Largest server chunk: the three.js hero (618 KB raw).

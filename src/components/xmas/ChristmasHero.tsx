@@ -48,7 +48,7 @@ export default function ChristmasHero() {
     <section className={`xh${inside ? ' is-inside' : ''}${ready ? ' is-ready' : ''}`} aria-labelledby="xh-title">
       <div className="xh-stage" ref={stage}>
         {/* eslint-disable-next-line @next/next/no-img-element -- fallback only when WebGL is unavailable */}
-        {failed && <img className="xh-fallback" src="/live/xmas/lid-bee.png" alt="" width={1104} height={738} />}
+        {failed && <img className="xh-fallback" src="/live/xmas/lid-bee.webp" alt="" width={1104} height={738} />}
         <div className="xh-tags" ref={tags} aria-hidden="true" />
       </div>
 

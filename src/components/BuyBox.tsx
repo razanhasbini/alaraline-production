@@ -27,8 +27,13 @@ export default function BuyBox({ id, name, image, type, inStock, purchasable, at
     : undefined;
   const ready = inStock && purchasable && (type !== 'variable' || !!variation);
   const go = async (checkout: boolean) => {
-    // same message WooCommerce shows when options are missing
-    if (!ready) { setHint('Please select some product options before adding this product to your cart.'); return; }
+    if (!ready) {
+      // name exactly what is missing ("Please choose your scent first."), or say the combination is unavailable
+      const missing = choices.filter(a => !picked[a.name]).map(a => a.name.toLowerCase());
+      const list = missing.length > 1 ? `${missing.slice(0, -1).join(', ')} and ${missing.at(-1)}` : missing[0];
+      setHint(missing.length ? `Please choose your ${list} first.` : 'This combination is not available right now. Please choose another option.');
+      return;
+    }
     setHint('');
     const ok = await add(id, { quantity: qty, name, image, silent: checkout, variation: choices.map(c => ({ attribute: c.name, value: picked[c.name] })) });
     if (ok && checkout) router.push('/checkout');

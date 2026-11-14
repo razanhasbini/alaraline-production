@@ -85,7 +85,7 @@ export function tube(loader: THREE.TextureLoader, aniso: number): Built {
   const cap = new THREE.Mesh(new THREE.CylinderGeometry(.155, .158, CAP, 48), softPlastic('#ffffff', { roughness: .3 }));
   cap.position.y = -L / 2 - CAP / 2; g.add(cap);
   const pw = .49, ph = pw * 733 / 292;
-  return withPhoto(g, L + .065 + CAP, loader, aniso, 'photo-tube.png', pw, ph, -L / 2 - CAP + ph / 2, .175);
+  return withPhoto(g, L + .065 + CAP, loader, aniso, 'photo-tube.webp', pw, ph, -L / 2 - CAP + ph / 2, .175);
 }
 
 // Buttered Up Mask: a frosted white jar, bowl-shaped, with a pink lid and pink print
@@ -110,7 +110,7 @@ export function jar(loader: THREE.TextureLoader, aniso: number): Built {
   lidTop.rotation.x = -Math.PI / 2; lidTop.position.y = .2015; g.add(lidTop);
   g.children.forEach(m => { m.position.y += .068; });     // centre the jar on its height
   const pw = .744, ph = pw * 629 / 730;
-  return withPhoto(g, .535, loader, aniso, 'photo-jar.png', pw, ph, 0, null);
+  return withPhoto(g, .535, loader, aniso, 'photo-jar.webp', pw, ph, 0, null);
 }
 
 // The Miracle Pro Edition: square magenta glass, ribbed gold collar, white dropper
@@ -134,5 +134,5 @@ export function miracle(loader: THREE.TextureLoader, aniso: number): Built {
   const bulb = new THREE.Mesh(new THREE.CapsuleGeometry(.048, .1, 8, 32), softPlastic('#fbf8f7', { roughness: .35 }));
   bulb.position.y = H / 2 + .1 + .09; g.add(bulb);
   const k = W / 438, pw = 440 * k, ph = 921 * k;                 // the photo's glass is 438 px wide
-  return withPhoto(g, H + .29, loader, aniso, 'photo-miracle.png', pw, ph, -H / 2 + ph / 2, Dp / 2 + .004);
+  return withPhoto(g, H + .29, loader, aniso, 'photo-miracle.webp', pw, ph, -H / 2 + ph / 2, Dp / 2 + .004);
 }

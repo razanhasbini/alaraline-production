@@ -26,10 +26,15 @@ export default function Snow() {
       };
     };
     const resize = () => {
+      // phones fire "resize" while scrolling (the address bar shows/hides): only the height changes then, so the
+      // flakes are kept (no jump, no rebuild mid-scroll); everything is rebuilt only when the width changes
+      const widthChanged = innerWidth !== W;
+      if (!widthChanged && Math.abs(innerHeight - H) < 2) return;
       W = innerWidth; H = innerHeight;
       const d = Math.min(devicePixelRatio || 1, 1.8);
       canvas.width = Math.max(1, Math.round(W * d)); canvas.height = Math.max(1, Math.round(H * d));
       ctx.setTransform(d, 0, 0, d, 0, 0);
+      if (!widthChanged && flakes.length) return;
       const mobile = W < 768;
       const count = Math.round(Math.min(mobile ? 115 : 230, Math.max(mobile ? 70 : 155, W / (mobile ? 3.8 : 4.1))));
       flakes = Array.from({ length: count }, () => make(true));

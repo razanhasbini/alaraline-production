@@ -5,7 +5,7 @@ import { getProducts } from '@/lib/woo';
 
 export const metadata: Metadata = {
   title: 'Shop',
-  description: 'Shop every ÀLara Line product: hair care, curl care, sets and offers, hair accessories and body care.',
+  description: 'Shop every ÀLara Line product: hair care, curl care, sets and offers, and hair accessories.',
   alternates: { canonical: '/shop' },
 };
 

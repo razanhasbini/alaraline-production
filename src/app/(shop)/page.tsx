@@ -41,7 +41,7 @@ async function BestSellers() {
 }
 
 async function CategoryTabs() {
-  const tabs = [['Hair Care', 'hair-care'], ['Body Care', 'body-care'], ['Hair Accessories', 'hair-accessories']] as const;
+  const tabs = [['Hair Care', 'hair-care'], ['Hair Accessories', 'hair-accessories']] as const; // Body Care discontinued
   const lists = await Promise.all(tabs.map(([, slug]) => getProducts({ category: slug, perPage: 10 })));
   return (
     <section className="psec">

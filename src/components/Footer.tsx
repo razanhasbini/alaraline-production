@@ -25,7 +25,7 @@ export default function Footer() {
       <div className="ar-wrap">
         <div className="ar-grid">
           <div className="ar-brand">
-            <Image className="ar-logo" src="/img/brand/alara-logo.png" alt="ÀLara Line" width={800} height={412} sizes="140px" />
+            <Image className="ar-logo" src="/img/brand/alara-logo.webp" alt="ÀLara Line" width={440} height={227} unoptimized />
             <p>Made using clean, non-toxic ingredients, our products are designed for everyone.</p>
             <p className="ar-greet">Merry Christmas from the hive.</p>
             <div className="ar-socials">

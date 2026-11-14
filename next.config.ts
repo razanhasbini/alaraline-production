@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
       { source: '/sitemap_index.xml', destination: '/sitemap.xml', permanent: true },
       { source: '/wishlist-2', destination: '/wishlist', permanent: true },
       { source: '/product-categories', destination: '/shop', permanent: true },
+      { source: '/product-category/body-care', destination: '/shop', permanent: true }, // discontinued category
       { source: '/product-tag/:tag', destination: '/shop', permanent: true },
       // the theme's demo pages and old demo blog (never real ÀLara content) → home
       ...['/home-01', '/home-02', '/home-03', '/home-04', '/home-05', '/home-06', '/test', '/tesst', '/test-2', '/sample-page',

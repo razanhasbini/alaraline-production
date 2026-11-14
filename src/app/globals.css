@@ -277,10 +277,10 @@ body:has(.xb-dialog[open]) { overflow: hidden; }
 .pol-stage { position: relative; display: flex; flex-direction: column; align-items: stretch; padding: 15px 1% 8px; isolation: isolate; }
 .pol-card { position: relative; width: 61%; margin: 0; padding: 8px 8px 0; background: #fff;
   box-shadow: 0 13px 23px -12px rgba(75, 40, 50, .27), 0 1px 4px rgba(0, 0, 0, .06); transition: transform .6s cubic-bezier(.34, 1.4, .5, 1); }
-/* every before/after photo in the same square polaroid frame, filled edge to edge (clients' photos come in all
-   shapes). !important: the Cloudflare image component writes each photo's own shape inline. */
+/* every before/after photo in the same polaroid frame, a touch taller than wide, filled edge to edge (clients' photos
+   come in all shapes). !important: the Cloudflare image component writes each photo's own shape inline. */
 .pol-img { display: block; width: 100% !important; height: auto !important; max-width: none !important; max-height: none !important;
-  aspect-ratio: 1 / 1 !important; object-fit: cover !important; object-position: 50% 30% !important; background: #f4eee9; }
+  aspect-ratio: 8 / 9 !important; object-fit: cover !important; object-position: 50% 30% !important; background: #f4eee9; }
 .pol-card figcaption { display: grid; place-items: center; height: 39px; font: italic 400 18px/1 var(--font-serif); color: #111; }
 .pol-before { align-self: flex-start; z-index: 1; transform: rotate(-3deg); transform-origin: 50% 0; }
 .pol-after { align-self: flex-end; z-index: 2; margin-top: 8px; transform: rotate(3deg); transform-origin: 20% 0; }
@@ -302,15 +302,22 @@ body:has(.xb-dialog[open]) { overflow: hidden; }
 .wall-next { right: -9px; }
 .wall-arrow:disabled { opacity: .35; cursor: default; }
 @media (max-width: 1080px) { .cr-grid { grid-auto-columns: calc((100% - 30px) / 2); gap: 30px; } }
+/* phones: one client per screen, before and after side by side, the next client peeking in at the edge (swipe) */
 @media (max-width: 760px) {
-  .clients { padding: 70px 0 60px; }
-  .cr-head { margin-bottom: 30px; }
-  .cr-grid { grid-auto-columns: 100%; gap: 18px; padding: 20px 4px 24px; }
-  .cr-pair:nth-child(even) { margin-top: 26px; }
-  .pol-card { width: 62%; padding: 7px 7px 0; }
-  .pol-card figcaption { height: 35px; font-size: 17px; }
-  .wall-arrow { display: none !important; }
+  .clients { padding: 70px 0 50px; }
+  .cr-head { margin-bottom: 18px; }
+  .cr-grid { grid-auto-columns: 84%; gap: 12px; padding: 16px 8% 24px; scroll-padding-inline: 8%; }
+  .cr-pair { width: 100%; scroll-snap-align: center; }
+  .cr-pair:nth-child(even) { margin-top: 0; }
+  .pol-stage { flex-direction: row; align-items: flex-start; padding: 14px 2px 10px; }
+  .pol-card { width: 53%; padding: 6px 6px 0; }
+  .pol-before, .cr-pair:nth-child(even) .pol-before { align-self: flex-start; transform: rotate(-3deg); }
+  .pol-after, .cr-pair:nth-child(even) .pol-after { align-self: flex-start; margin: 22px 0 0 -6%; transform: rotate(3.5deg); }
+  .pol-card figcaption { height: 32px; font-size: 16px; }
 }
+/* arrows only for a mouse; touch screens swipe */
+@media (max-width: 760px) and (hover: none) { .wall-arrow { display: none !important; } }
+@media (max-width: 760px) and (hover: hover) { .wall-prev { left: 2px; } .wall-next { right: 2px; } .wall-arrow { width: 36px; height: 36px; font-size: 26px; } }
 
 /* ---------- Elevate ---------- */
 .elevate { display: grid; align-items: center; gap: 50px; padding: 90px 0 0; background: var(--wash); overflow: hidden; }
@@ -733,3 +740,6 @@ main > :last-child { margin-bottom: 20px; }
 .busy p { font: 400 16px/1.65 var(--font-sans); color: #444; }
 .busy-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 22px; margin-top: 6px; }
 .busy-home { font: 500 14px var(--font-sans); color: #111; border-bottom: 1px solid currentColor; }
+
+/* the WhatsApp button stays out of the way where it could cover the main buttons: cart, checkout, open bag or pop-up */
+body:has(.cart-wrap, .co-grid, .bag.is-open, dialog[open]) .whatsapp { display: none; }
