@@ -20,8 +20,6 @@
   --gutter: 15px;
 }
 @media (min-width: 768px) { :root { --hb-h: 60px; } }
-/* phones wide enough (most): the offer bar fits on one line, giving the page back ~30px on every screen */
-@media (min-width: 380px) and (max-width: 767px) { :root { --hb-h: 42px; } }
 /* sticky header height (phone row / desktop two rows), for things that stick or scroll to below it */
 :root { --hdr-h: 60px; }
 @media (min-width: 1200px) { :root { --hdr-h: 112px; } }
@@ -65,12 +63,7 @@ ul { padding: 0; list-style: none; }
 .hashbar-timer { display: flex; align-items: baseline; gap: 6px; }
 .hashbar-timer > span:first-child { font-size: .9em; white-space: nowrap; }
 .hashbar-count { min-width: 9ch; font: 700 16px/1.5 'Courier New', monospace; letter-spacing: .5px; color: #ffb6d5; white-space: nowrap; text-align: left; }
-@media (max-width: 379px) { .hashbar { flex-direction: column; } }
-@media (min-width: 380px) and (max-width: 767px) {
-  .hashbar { flex-wrap: nowrap; gap: 0 7px; padding: 4px 10px; font-size: 13.5px; white-space: nowrap; }
-  .hashbar-timer { gap: 4px; }
-  .hashbar-count { min-width: 0; font-size: 13px; }
-}
+@media (max-width: 767px) { .hashbar { flex-direction: column; } } /* phones: the countdown sits under the text */
 .topbar { display: flex; align-items: center; height: 40px; padding: 0 var(--gutter); background: var(--blush); color: #fff;
   font: italic 400 15px/1 'Cormorant Garamond', Garamond, Georgia, serif; }
 .topbar p { width: 100%; }
@@ -193,6 +186,9 @@ ul { padding: 0; list-style: none; }
    !important because the Cloudflare image component writes object-fit: cover inline on fill images. */
 .xb-card .xb-media { aspect-ratio: 4 / 3; }
 .xb-slide img { object-fit: contain !important; object-position: center !important; transform-origin: center; padding: 3%; }
+/* the second photo (gift bag + box) is cropped through the bag in the top-left corner: pin it to the card's
+   top-left edges with no air, so the bag runs off the card like a real crop (the whole box stays visible) */
+.xb-card .xb-slide:nth-child(2) img { padding: 0; object-position: left top !important; transform-origin: left top; }
 .xb-sheet-media .xb-slide img { padding: 0; } /* square photo in a square frame: already whole, no extra air needed */
 .xb-dots { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 17px; padding: 6px 0 3px; background: #fff; }
 .xb-dots button { width: 6px; height: 6px; padding: 0; border-radius: 50%; background: #d9c6cd; transition: background .25s, transform .25s; }
