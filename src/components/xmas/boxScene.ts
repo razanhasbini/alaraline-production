@@ -205,8 +205,8 @@ export async function createBoxScene(canvas: HTMLCanvasElement, opts: Options): 
     items.push({ casting: true, id, name, g, model: built.model, photo: built.photo, front: built.front, rest: new THREE.Vector3(x, y, z), restQ, show: new THREE.Vector3(sx, sy, sz), showQ: new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, 0)), hover: 0, tag, drop: nameDrop });
     g.position.set(x, y, z); g.quaternion.copy(restQ);
   };
-  place(bottle(loader, 'shampoo.webp', aniso, 'photo-shampoo.webp'), 'shampoo', slots.shampoo.x, INSERT_TOP + .02, slots.shampoo.z + .09, true);
-  place(bottle(loader, 'conditioner.webp', aniso, 'photo-conditioner.webp'), 'conditioner', slots.conditioner.x, INSERT_TOP + .02, slots.conditioner.z + .09, true);
+  place(bottle(loader, 'shampoo.webp', aniso, 'photo-shampoo.png'), 'shampoo', slots.shampoo.x, INSERT_TOP + .02, slots.shampoo.z + .09, true);
+  place(bottle(loader, 'conditioner.webp', aniso, 'photo-conditioner.png'), 'conditioner', slots.conditioner.x, INSERT_TOP + .02, slots.conditioner.z + .09, true);
   // sunk into its slot, with the cap's end against the slot's front wall so only the photo's cap shows
   place(tube(loader, aniso), 'tube', slots.tube.x, INSERT_TOP - .16, slots.tube.z - .03, true);
   place(miracle(loader, aniso), 'miracle', slots.miracle.x, INSERT_TOP + .01, slots.miracle.z + .14, true);

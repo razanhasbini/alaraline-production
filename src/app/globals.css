@@ -268,19 +268,20 @@ body:has(.xb-dialog[open]) { overflow: hidden; }
 .cr-eyebrow { margin-bottom: 18px; font: 600 12px/1 var(--font-sans); letter-spacing: .28em; text-transform: uppercase; color: var(--pink); }
 .cr-head .title { margin-bottom: 22px; }
 .cr-sub { font-size: 16px; color: var(--text); }
-.wall-frame { position: relative; max-width: 1140px; margin: 0 auto; }
-.cr-grid { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 84px) / 4); gap: 28px; align-items: start; overflow-x: auto; scroll-snap-type: x mandatory;
-  scrollbar-width: none; overscroll-behavior-inline: contain; padding: 20px 3px 26px; scroll-behavior: smooth; }
+/* Sizes copied from the live alaraline.co Results Wall (measured in the browser on 14 Nov 2026, phone / tablet / desktop) */
+.wall-frame { position: relative; max-width: 1110px; margin: 0 auto; }
+.cr-grid { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 120px) / 4); gap: 40px; align-items: start; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; overscroll-behavior-inline: contain; padding: 22px 8px; scroll-behavior: smooth; }
 .cr-grid::-webkit-scrollbar { display: none; }
-.cr-pair { position: relative; width: min(100%, 320px); min-width: 0; margin: 0 auto; scroll-snap-align: start; }
-.cr-pair:nth-child(even) { margin-top: 44px; }
+.cr-pair { position: relative; width: 100%; min-width: 0; margin: 0 auto; padding-top: 16px; scroll-snap-align: start; }
+.cr-pair:nth-child(even) { margin-top: 24px; }
 .pol-stage { position: relative; display: flex; flex-direction: column; align-items: stretch; padding: 15px 1% 8px; isolation: isolate; }
 .pol-card { position: relative; width: 61%; margin: 0; padding: 8px 8px 0; background: #fff;
   box-shadow: 0 13px 23px -12px rgba(75, 40, 50, .27), 0 1px 4px rgba(0, 0, 0, .06); transition: transform .6s cubic-bezier(.34, 1.4, .5, 1); }
-/* every before/after photo in the same polaroid frame, a touch taller than wide, filled edge to edge (clients' photos
-   come in all shapes). !important: the Cloudflare image component writes each photo's own shape inline. */
+/* a 4:5 polaroid frame showing the whole photo, as on live. !important: the Cloudflare image component writes each
+   photo's own shape inline. */
 .pol-img { display: block; width: 100% !important; height: auto !important; max-width: none !important; max-height: none !important;
-  aspect-ratio: 8 / 9 !important; object-fit: cover !important; object-position: 50% 30% !important; background: #f4eee9; }
+  aspect-ratio: 4 / 5 !important; object-fit: contain !important; object-position: 50% 50% !important; background: #fff; }
 .pol-card figcaption { display: grid; place-items: center; height: 39px; font: italic 400 18px/1 var(--font-serif); color: #111; }
 .pol-before { align-self: flex-start; z-index: 1; transform: rotate(-3deg); transform-origin: 50% 0; }
 .pol-after { align-self: flex-end; z-index: 2; margin-top: 8px; transform: rotate(3deg); transform-origin: 20% 0; }
@@ -301,21 +302,18 @@ body:has(.xb-dialog[open]) { overflow: hidden; }
 .wall-prev { left: -9px; }
 .wall-next { right: -9px; }
 .wall-arrow:disabled { opacity: .35; cursor: default; }
-@media (max-width: 1080px) { .cr-grid { grid-auto-columns: calc((100% - 30px) / 2); gap: 30px; } }
-/* phones: one client per screen, before and after side by side, the next client peeking in at the edge (swipe) */
+@media (max-width: 1080px) { .wall-frame { margin: 0 10px; } .cr-grid { grid-auto-columns: calc((100% - 36px) / 2); gap: 36px; } }
+/* phones (as live): two clients per screen, before above after */
 @media (max-width: 760px) {
-  .clients { padding: 70px 0 50px; }
-  .cr-head { margin-bottom: 18px; }
-  .cr-grid { grid-auto-columns: 84%; gap: 12px; padding: 16px 8% 24px; scroll-padding-inline: 8%; }
-  .cr-pair { width: 100%; scroll-snap-align: center; }
+  .clients { padding: 70px 0 60px; }
+  .cr-head { margin-bottom: 30px; }
+  .wall-frame { margin: 0 11px; }
+  .cr-grid { grid-auto-columns: calc((100% - 12px) / 2); gap: 12px; padding: 22px 2px 26px; }
   .cr-pair:nth-child(even) { margin-top: 0; }
-  .pol-stage { flex-direction: row; align-items: flex-start; padding: 14px 2px 10px; }
-  .pol-card { width: 53%; padding: 6px 6px 0; }
-  .pol-before, .cr-pair:nth-child(even) .pol-before { align-self: flex-start; transform: rotate(-3deg); }
-  .pol-after, .cr-pair:nth-child(even) .pol-after { align-self: flex-start; margin: 22px 0 0 -6%; transform: rotate(3.5deg); }
-  .pol-card figcaption { height: 32px; font-size: 16px; }
+  .pol-card { width: 62%; padding: 7px 7px 0; }
+  .pol-card figcaption { height: 35px; font-size: 17px; }
 }
-/* arrows only for a mouse; touch screens swipe */
+/* arrows: hidden on touch phones (as live; they swipe), kept for a mouse */
 @media (max-width: 760px) and (hover: none) { .wall-arrow { display: none !important; } }
 @media (max-width: 760px) and (hover: hover) { .wall-prev { left: 2px; } .wall-next { right: 2px; } .wall-arrow { width: 36px; height: 36px; font-size: 26px; } }
 

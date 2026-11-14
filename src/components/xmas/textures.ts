@@ -54,7 +54,7 @@ function honeycomb(x: CanvasRenderingContext2D, ox: number, oy: number, r: numbe
 }
 
 export async function lidArt(): Promise<{ top: Art; flap: Art; inside: Art }> {
-  const [bee, logo] = await Promise.all([load(`/live/xmas/lid-bee.webp`), load(`/live/xmas/logo-mask.png`)]);
+  const [bee, logo] = await Promise.all([load(`/live/xmas/lid-bee.png`), load(`/live/xmas/logo-mask.png`)]);
   const goldLogo = tinted(logo, GOLD), foilLogo = tinted(logo, '#fff');
   const foilBee = tinted(bee, '#fff');
 
@@ -85,7 +85,7 @@ export async function lidArt(): Promise<{ top: Art; flap: Art; inside: Art }> {
   fx.drawImage(bee, (FW - sw) / 2, (FH - sh) / 2, sw, sh); fy.drawImage(foilBee, (FW - sw) / 2, (FH - sh) / 2, sw, sh);
 
   /* ---- inside the lid: the box's own print, from a photo of the open box flattened to face the camera ---- */
-  const inside = await load(`/live/xmas/inside-lid.webp`);
+  const inside = await load(`/live/xmas/inside-lid.jpg`);
   const [im, ix] = canvas(inside.width, inside.height);
   ix.drawImage(inside, 0, 0);
   // the lid's line, redrawn crisp where it is printed (the photo's own lettering was too soft to read)
