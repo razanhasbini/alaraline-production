@@ -42,7 +42,9 @@ export async function storeApi<T = RawCart>(path: string, init: { method?: strin
     if (ids.token) headers['Cart-Token'] = ids.token;
     if (ids.nonce) headers.Nonce = ids.nonce;
     if (json !== undefined) headers['Content-Type'] = 'application/json';
-    const retries = m === 'GET' ? 2 : 0;
+    // A 429 is Hostinger's traffic protection refusing the request before WordPress sees it: nothing was applied,
+    // so a bag change (add, quantity, remove, coupon…) may safely try once more. Placing the order never repeats.
+    const retries = m === 'GET' ? 2 : p === '/checkout' ? 0 : 1;
     let res: Response | null = null;
     for (let attempt = 0; ; attempt++) {
       try {
@@ -51,13 +53,15 @@ export async function storeApi<T = RawCart>(path: string, init: { method?: strin
         res = null;
         logWp('warn', `cart ${m} ${p}`, 0, null, { attempt, error: (e as Error).message.slice(0, 120) });
       }
-      const temporary = !res || res.status === 429 || res.status >= 500;
+      // reads: any temporary failure; changes: only a 429 (after a dropped connection or a 5xx it may have been applied)
+      const temporary = m === 'GET' ? !res || res.status === 429 || res.status >= 500 : res?.status === 429;
       if (res?.status === 429) noteRateLimit(res);
       if (!temporary || attempt >= retries) break;
       const told = retryAfterMs(res);
       if (told !== null && told > 2500) break; // too long to keep the shopper waiting
       res?.body?.cancel().catch(() => {});
-      await new Promise(r => setTimeout(r, told ?? Math.min(2500, 300 * 2 ** attempt) * (0.75 + Math.random() * 0.5)));
+      const base = m === 'GET' ? Math.min(2500, 300 * 2 ** attempt) : 1200;
+      await new Promise(r => setTimeout(r, (told ?? base) * (0.75 + Math.random() * 0.5)));
     }
     if (!res) {
       if (m === 'GET') throw new CartError('The shop could not be reached. Please try again.', 503);
