@@ -16,8 +16,8 @@ const PRODUCTS: BoxProduct[] = [
   { id: 'miracle', name: 'The Miracle Pro-Edition' },
   { id: 'jar', name: 'Buttered Up Mask' },
 ];
-// "Discover the box" scrolls down to the Christmas Bundles section on the home page (ChristmasBundles.tsx, id="bundles")
-const BOX = '/#bundles';
+// "Discover the box" opens the Limited Offers page (same link as the menu's Limited Offers)
+const BOX = '/product-category/offers';
 
 export default function ChristmasHero() {
   const stage = useRef<HTMLDivElement>(null);
