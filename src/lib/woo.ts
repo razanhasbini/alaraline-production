@@ -3,10 +3,10 @@ import { cacheLife, cacheTag } from 'next/cache';
 import { recall, remember } from './fallback';
 import { inCooldown, logWp, wpGetJson } from './wp-fetch';
 
-/** Catalog data is refreshed every 6 hours (not hourly) to stay well inside the Workers Free KV write allowance
- *  (~1,000/day). Edits made in this site's /admin refresh at once (updateTag); cart and checkout always use live
- *  WooCommerce prices and stock. */
-export const CATALOG_CACHE = { stale: 300, revalidate: 6 * 3600, expire: 3 * 86400 };
+/** Catalog data is refreshed every 5 minutes, so edits made in wp-admin show up within about 5 minutes (Workers Paid
+ *  has room for the KV writes; refreshes happen in the background, only when someone visits). Edits made in this
+ *  site's /admin refresh at once (updateTag); cart and checkout always use live WooCommerce prices and stock. */
+export const CATALOG_CACHE = { stale: 300, revalidate: 300, expire: 3 * 86400 };
 
 // The only module that talks to WordPress. WooCommerce stays the source of truth for products and prices;
 // nothing here is hardcoded. Results are cached for an hour (and can be refreshed on demand by tag later).
