@@ -16,8 +16,8 @@ const PRODUCTS: BoxProduct[] = [
   { id: 'miracle', name: 'The Miracle Pro-Edition' },
   { id: 'jar', name: 'Buttered Up Mask' },
 ];
-// "Discover the box" opens the set that's in the box (shampoo, conditioner, leave-in, Miracle Pro-Edition, mask)
-const BOX = '/product/full-treatment-set';
+// "Discover the box" scrolls down to the Christmas Bundles section on the home page (ChristmasBundles.tsx, id="bundles")
+const BOX = '/#bundles';
 
 export default function ChristmasHero() {
   const stage = useRef<HTMLDivElement>(null);
@@ -26,7 +26,6 @@ export default function ChristmasHero() {
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const [phase, setPhase] = useState<Phase>('turn');
-  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -36,7 +35,7 @@ export default function ChristmasHero() {
     stage.current!.prepend(canvas);
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     import('./boxScene')
-      .then(m => m.createBoxScene(canvas, { reducedMotion, products: PRODUCTS, tagLayer: tags.current!, onPhase: setPhase, onActive: setActive }))
+      .then(m => m.createBoxScene(canvas, { reducedMotion, products: PRODUCTS, tagLayer: tags.current!, onPhase: setPhase, onActive: () => {} }))
       .then(s => { if (!alive) { s.dispose(); return; } scene.current = s; setReady(true); })
       .catch(() => alive && setFailed(true));
     return () => { alive = false; scene.current?.dispose(); scene.current = null; canvas.remove(); };
@@ -61,9 +60,6 @@ export default function ChristmasHero() {
           </div>
           <div className="xh-words xh-words-inside" aria-hidden={!inside}>
             <p className="xh-head">Your bee-autiful hair journey <em>begins here</em></p>
-            <ul className="xh-list" aria-label="In the box">
-              {PRODUCTS.map(p => <li key={p.id} className={active === p.id ? 'is-active' : undefined}>{p.name}</li>)}
-            </ul>
           </div>
         </div>
         <div className="xh-actions">

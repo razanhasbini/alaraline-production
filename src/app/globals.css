@@ -182,7 +182,7 @@ ul { padding: 0; list-style: none; }
 .card-title a:hover { color: var(--pink); }
 
 /* ---------- Christmas bundles (plugin v1.3.10 look) ---------- */
-.xb { padding: 90px 0 100px; background: #fff3f7; }
+.xb { padding: 90px 0 100px; background: #fff3f7; scroll-margin-top: var(--hb-h, 0px); } /* "Discover the box" lands here below the sticky bar */
 .xb-title { margin-bottom: 40px; text-align: center; font: 400 clamp(32px, 4.4vw, 52px)/1.2 Georgia, 'Times New Roman', serif; color: #9f3452; }
 .xb-title em { color: #e54892; }
 .xb-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: min(100%, 1010px); margin: 0 auto; }
@@ -336,7 +336,7 @@ body:has(.xb-dialog[open]) { overflow: hidden; }
 .elevate-copy { display: flex; flex-direction: column; align-items: center; padding: 0 20px; text-align: center; }
 .elevate-bee { width: 100px; height: auto; margin-bottom: 30px; }
 .elevate .title { max-width: 434px; margin: 0; }
-.elevate-copy p { margin: 34px 0 40px; }
+.elevate-copy .btn { margin-top: 40px; }
 .elevate-media { position: relative; justify-self: center; width: min(724px, 100%); aspect-ratio: 1414 / 1235; }
 .elevate-img { position: absolute; display: block; object-fit: cover; }
 .elevate-img-right { top: 0; right: 0; width: 71.5%; height: 100%; }

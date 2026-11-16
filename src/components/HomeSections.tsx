@@ -30,7 +30,6 @@ export function Elevate() {
       <div className="elevate-copy">
         <Image className="elevate-bee" src={wpImage('https://alaraline.co/wp-content/uploads/2026/07/IMG_5814-1.png', 280)} alt="" width={138} height={138} sizes="138px" />
         <h2 id="elevate-title" className="title">Elevate Your Haircare Routine with ÀLara Line</h2>
-        <p>ÀLara Line Exclusive Lineup of Dreamy Hair Essentials!</p>
         <Link className="btn" href="/about">Explore more</Link>
       </div>
       <div className="elevate-media">

@@ -9,7 +9,7 @@ export default async function ChristmasBundles() {
   const items = (bundles?.items ?? []).filter(b => b.purchasable && b.in_stock && Number(b.price) > 0);
   if (!bundles?.enabled || items.length === 0) return null;
   return (
-    <section className="xb" aria-labelledby="xb-title">
+    <section className="xb" id="bundles" aria-labelledby="xb-title">
       <div className="wrap">
         <h2 id="xb-title" className="xb-title">Christmas Bundles <em>Wrapped with love</em></h2>
         <BundleGrid
