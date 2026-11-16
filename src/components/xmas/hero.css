@@ -36,9 +36,9 @@
 .xh-head em { font-family: var(--font-serif); font-style: italic; color: var(--xh-blush); }
 .xh-text { margin-top: 24px; max-width: 34ch; font-size: 17px; color: rgba(251, 241, 234, .86); }
 .xh-actions { display: flex; align-items: center; gap: 26px; margin-top: 34px; }
-.xh-btn { display: inline-flex; align-items: center; gap: 14px; height: 51px; padding: 0 28px; background: var(--xh-champagne); color: #3d0b1b;
+.xh-btn { display: inline-flex; align-items: center; gap: 14px; height: 51px; padding: 0 28px; background: #fff; color: #3d0b1b;
   font: 700 12px/1 var(--font-sans); letter-spacing: 2.4px; text-transform: uppercase; transition: background .3s, transform .2s var(--xh-ease); }
-.xh-btn:hover { background: #fff; }
+.xh-btn:hover { background: var(--xh-ivory); }
 .xh-btn:active { transform: scale(.97); }
 .xh-btn span { transition: transform .3s var(--xh-ease); }
 .xh-btn:hover span { transform: translateX(4px); }
