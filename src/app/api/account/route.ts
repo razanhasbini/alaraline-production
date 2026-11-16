@@ -1,17 +1,25 @@
 import { NextResponse } from 'next/server';
-import { accountApi, CartError, customerToken, setCustomerToken } from '@/lib/cart';
+import { accountApi, CartError, customerToken, setCustomerToken, tokenUserId } from '@/lib/cart';
 
 // Customer accounts (the same WooCommerce customers as before). Sign-in is kept in an HttpOnly cookie on this site.
 type AuthResult = { token: string; user: unknown };
+const PRIVATE = { 'Cache-Control': 'private, no-store' }; // one shopper's data: no cache anywhere may keep it
 const s = (v: unknown, max = 200) => String(v ?? '').trim().slice(0, max);
 
 export async function GET(req: Request) {
   const what = new URL(req.url).searchParams.get('what') ?? 'me';
-  if (!(await customerToken())) return NextResponse.json({ ok: true, user: null });
+  const token = await customerToken();
+  if (!token) return NextResponse.json({ ok: true, user: null }, { headers: PRIVATE });
   try {
-    if (what === 'orders') return NextResponse.json({ ok: true, orders: await accountApi('/account/orders') });
-    if (what === 'order') return NextResponse.json({ ok: true, order: await accountApi(`/account/orders/${Number(new URL(req.url).searchParams.get('id'))}`) });
-    return NextResponse.json({ ok: true, user: await accountApi('/account/me') });
+    if (what === 'orders') return NextResponse.json({ ok: true, orders: await accountApi('/account/orders') }, { headers: PRIVATE });
+    if (what === 'order') return NextResponse.json({ ok: true, order: await accountApi(`/account/orders/${Number(new URL(req.url).searchParams.get('id'))}`) }, { headers: PRIVATE });
+    const user = await accountApi<{ id?: number }>('/account/me');
+    // Safety net: never show an account that isn't the one this visitor signed in as (a cache upstream once did that)
+    if (Number(user?.id) !== tokenUserId(token)) {
+      console.error(JSON.stringify({ wp: 'account', problem: 'answer was for another account', got: user?.id ?? null }));
+      return NextResponse.json({ ok: false, message: 'Your account could not be loaded. Please refresh the page.' }, { status: 502, headers: PRIVATE });
+    }
+    return NextResponse.json({ ok: true, user }, { headers: PRIVATE });
   } catch (e) {
     if (e instanceof CartError && e.status === 401) { await setCustomerToken(null); return NextResponse.json({ ok: true, user: null }); }
     return fail(e);

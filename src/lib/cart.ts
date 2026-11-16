@@ -137,12 +137,27 @@ export async function setCustomerToken(token: string | null, remember = true) {
   else { jar.delete(CUSTOMER); jar.delete('alara_in'); }
 }
 
+/** The account id inside a sign-in token ("id|expiry|signature", base64; WordPress checks the signature). Used only
+ *  to double-check WordPress's answer, never to trust anyone: 0 when unreadable. */
+export function tokenUserId(token: string | null): number {
+  if (!token) return 0;
+  try { return Number(atob(token).split('|')[0]) || 0; } catch { return 0; }
+}
+
 /** Calls the ÀLara Headless API account routes (customer accounts live in WooCommerce, as before). */
 export async function accountApi<T>(path: string, init: { method?: string; json?: unknown; withCustomer?: boolean } = {}): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' };
+  const method = init.method ?? 'GET';
   if (init.json !== undefined) headers['Content-Type'] = 'application/json';
-  if (init.withCustomer !== false) { const t = await customerToken(); if (t) headers['X-Alara-Customer'] = t; }
-  const res = await fetch(`${WC}/wp-json/alara/v1${path}`, { method: init.method ?? 'GET', headers, body: init.json === undefined ? undefined : JSON.stringify(init.json), cache: 'no-store' });
+  let url = `${WC}/wp-json/alara/v1${path}`;
+  if (init.withCustomer !== false) {
+    const t = await customerToken();
+    if (t) headers['X-Alara-Customer'] = t;
+    // Hostinger's LiteSpeed cache keys answers by address only (it ignores the sign-in header) and once served one
+    // customer's account to everyone. The customer's id in the address means a cached copy can only ever be their own.
+    if (method === 'GET') url += `${url.includes('?') ? '&' : '?'}c=${tokenUserId(t)}`;
+  }
+  const res = await fetch(url, { method, headers, body: init.json === undefined ? undefined : JSON.stringify(init.json), cache: 'no-store' });
   const data = await res.json().catch(() => null) as (T & { message?: string }) | null;
   if (!res.ok) throw new CartError(decode(data?.message ?? 'Something went wrong. Please try again.'), res.status);
   return data as T;
