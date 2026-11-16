@@ -36,7 +36,7 @@ export default function CustomerLove() {
         {/* the theme's comment icon, tinted pink like on live */}
         <span className="love-ic" aria-hidden="true" />
         <h2 id="love-title" className="love-title">Customer Love</h2>
-        <p className="love-sub">Over 79K Positive Reviews</p>
+        <p className="love-sub">Over 80K Positive Reviews</p>
         <div className="love-slider" onMouseEnter={() => (paused.current = true)} onMouseLeave={() => (paused.current = false)}
           onFocus={() => (paused.current = true)} onBlur={() => (paused.current = false)}>
           <div className="love-track" style={{ transform: `translateX(-${(current * 100) / perView}%)` }}>
