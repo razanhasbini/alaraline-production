@@ -36,8 +36,8 @@ export default function WallTrack({ children }: { children: ReactNode }) {
   const showPrev = !state.fits && !state.atStart;
   const showNext = !state.fits && !state.atEnd;
   const arrow = (
-    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" />
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9.5 5.5 16 12l-6.5 6.5" />
     </svg>
   );
 
