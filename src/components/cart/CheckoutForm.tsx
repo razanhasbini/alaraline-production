@@ -11,8 +11,9 @@ import { formatPrice } from '@/lib/site';
 import { useCart } from './CartProvider';
 import { wpImage } from '@/lib/wp-image';
 
-// No postcode or state/county boxes (Lebanon uses neither; WooCommerce doesn't require them there). The keys stay so
-// a signed-in customer's saved values pass through unchanged.
+// No postcode or state/county boxes (Lebanon doesn't use them). WooCommerce still requires a postcode for Lebanon,
+// so the server fills in "0000" when none is given (src/app/api/cart/route.ts). The keys stay so a signed-in
+// customer's saved values pass through unchanged.
 type Addr = { first_name: string; last_name: string; country: string; address_1: string; address_2: string; city: string; state: string; postcode: string; phone: string; email: string };
 const EMPTY: Addr = { first_name: '', last_name: '', country: 'LB', address_1: '', address_2: '', city: '', state: '', postcode: '', phone: '', email: '' };
 
@@ -110,10 +111,10 @@ export default function CheckoutForm({ packaging, blocked }: { packaging: Packag
             <div className="co-fields">
               {addressFields(bill, setBill, 'billing')}
               {field(bill, setBill, 'phone', 'Phone', { required: true, type: 'tel', wide: true, auto: 'billing tel' })}
-              {/* optional: an order without one still goes through (WordPress plugin, ÀLara Headless API 1.3.0);
-                  with one, the customer gets the order confirmation email as before. Needed to create an account. */}
-              {field(bill, setBill, 'email', 'Email address', { required: account && !user, type: 'email', wide: true, auto: 'billing email' })}
-              <p className="co-hint">Add your email to receive your order confirmation.</p>
+              {/* Required for now: WooCommerce refuses an order without an email. To make it optional, install
+                  ÀLara Headless API 1.3.0 on WordPress first, then use: required: account && !user (and the
+                  co-hint line "Add your email to receive your order confirmation."). */}
+              {field(bill, setBill, 'email', 'Email address', { required: true, type: 'email', wide: true, auto: 'billing email' })}
             </div>
           </section>
 

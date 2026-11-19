@@ -23,10 +23,16 @@ type Body =
   | { action: 'checkout'; billing: Record<string, string>; shipping?: Record<string, string>; note?: string; newsletter?: boolean; accountPassword?: string };
 
 const str = (v: unknown, max = 200) => String(v ?? '').trim().slice(0, max);
+/** The checkout has no postcode box (Lebanon doesn't use postcodes), but WooCommerce requires one for Lebanon:
+ *  "0000" is sent when none was given. ÀLara Headless API 1.3.0 makes it optional; once that plugin is installed
+ *  this default can go. */
+const NO_POSTCODE = '0000';
 const address = (a: Record<string, string> | undefined, withContact: boolean) => {
   const k = ['first_name', 'last_name', 'company', 'address_1', 'address_2', 'city', 'state', 'postcode', 'country'];
   if (withContact) k.push('phone', 'email');
-  return Object.fromEntries(k.map(f => [f, str(a?.[f])]));
+  const out: Record<string, string> = Object.fromEntries(k.map(f => [f, str(a?.[f])]));
+  if (!out.postcode) out.postcode = NO_POSTCODE;
+  return out;
 };
 /** The delivery address. WooCommerce asks for a phone on it too: the shopper's phone goes with it
  *  (the one typed for the delivery address if any, otherwise the billing phone). */
