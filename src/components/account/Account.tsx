@@ -219,8 +219,6 @@ function Addresses({ user, type, onSaved }: { user: Customer; type: 'billing' | 
         <Field name="address_1" label="Street address" required wide def={a.address_1} placeholder="House number and street name" />
         <Field name="address_2" label="Apartment, suite, unit, etc." wide def={a.address_2} />
         <Field name="city" label="Town / City" required wide def={a.city} />
-        <Field name="state" label="State / County" wide def={a.state} />
-        <Field name="postcode" label="Postcode / ZIP" required wide def={a.postcode} />
         {type === 'billing' && <Field name="phone" label="Phone" type="tel" wide def={a.phone} />}
         {type === 'billing' && <Field name="email" label="Email address" type="email" required wide def={a.email} />}
       </div>

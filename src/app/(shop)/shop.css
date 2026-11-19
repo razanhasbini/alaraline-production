@@ -137,6 +137,7 @@
 .co-field input, .co-field textarea { width: 100%; min-height: 46px; padding: 10px 14px; border: 1px solid #e5e5e5; background: #fff; font: inherit; color: #000; transition: border-color .2s; }
 .co-field input:focus, .co-field textarea:focus { border-color: #000; outline: none; }
 .co-field strong { font-weight: 500; }
+.co-hint { grid-column: 1 / -1; margin-top: -10px; font-size: 13px; color: #777; }
 @media (max-width: 600px) { .co-fields { grid-template-columns: 1fr; } }
 .co-check { display: flex; align-items: center; gap: 10px; cursor: pointer; color: #000; }
 .co-check input { width: 16px; height: 16px; accent-color: #000; }
