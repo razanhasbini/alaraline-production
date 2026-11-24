@@ -6,7 +6,6 @@ packaging fee, delivery and orders all live there. This app never calculates or 
 ## Run it
 
 ```bash
-cd web
 cp .env.example .env.local   # then fill it in (see below)
 npm install
 npm run dev                  # http://localhost:3000
