@@ -98,7 +98,8 @@ export function sendBag(b: Bag, next: 'cart' | 'checkout'): Bag {
   };
   const form = document.createElement('form');
   form.method = 'POST';
-  form.action = `${SHOP_URL}/?alara-handoff=1`;
+  // posted to the page it opens, so even if WordPress couldn't take the bag the shopper still lands there
+  form.action = `${next === 'checkout' ? SHOP_CHECKOUT : SHOP_CART}?alara-handoff=1`;
   form.style.display = 'none';
   for (const [name, value] of [['alara_action', 'handoff'], ['next', next], ['payload', JSON.stringify(payload)]]) {
     const input = document.createElement('input');
