@@ -8,16 +8,17 @@ import QtyStepper from './cart/QtyStepper';
 import { useCompare, useWishlist } from './cart/Wishlist';
 import { CompareIcon, HeartIcon } from './Icons';
 
-type Props = { id: number; name: string; image: string; type: string; inStock: boolean; purchasable: boolean; attributes: Attribute[]; variations: Variation[] };
+type Props = { id: number; name: string; slug: string; image: string; price: number; type: string; inStock: boolean; purchasable: boolean; attributes: Attribute[]; variations: Variation[] };
 
 // Live product form: option dropdowns ("Choose an option"), quantity − 1 +, ADD TO CART, BUY NOW, Compare / Add to wishlist.
-// The cart is WooCommerce's; it checks stock, the option and the price itself.
-export default function BuyBox({ id, name, image, type, inStock, purchasable, attributes, variations }: Props) {
+// "Add to cart" keeps the shopper here (the bag, src/lib/bag.ts); "Buy now" adds it and opens WooCommerce's checkout,
+// which checks stock, the option and the price itself.
+export default function BuyBox({ id, name, slug, image, price, type, inStock, purchasable, attributes, variations }: Props) {
   const choices = type === 'variable' ? attributes.filter(a => a.forVariations) : [];
   const [picked, setPicked] = useState<Record<string, string>>({});
   const [qty, setQty] = useState(1);
   const [hint, setHint] = useState('');
-  const { add, busy, error } = useCart();
+  const { add, go: toShop, busy, error } = useCart();
   const router = useRouter();
   const wish = useWishlist(), cmp = useCompare();
 
@@ -35,8 +36,9 @@ export default function BuyBox({ id, name, image, type, inStock, purchasable, at
       return;
     }
     setHint('');
-    const ok = await add(id, { quantity: qty, name, image, silent: checkout, variation: choices.map(c => ({ attribute: c.name, value: picked[c.name] })) });
-    if (ok && checkout) router.push('/checkout');
+    // a variable product's price depends on the option: WooCommerce shows it at checkout
+    const ok = await add(id, { quantity: qty, name, image, slug, price: type === 'variable' ? null : price, silent: checkout, variation: choices.map(c => ({ attribute: c.name, value: picked[c.name] })) });
+    if (ok && checkout) toShop('checkout');
   };
 
   return (

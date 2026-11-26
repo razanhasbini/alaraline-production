@@ -1,129 +1,19 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import { logWp, noteRateLimit, retryAfterMs } from './wp-fetch';
 
-// The shopper's cart, checkout and account all run through WooCommerce's official Store API
-// (/wp-json/wc/store/v1). WooCommerce keeps doing all the real work: prices, stock, promo codes,
-// delivery ($4 Lebanon), cash on delivery, the PR box fee, order emails. This file only passes requests
-// along from this site's server and keeps the shopper's cart id in an HttpOnly cookie on this site.
+// Customer accounts (sign-in, My Account) for the storefront, through the ÀLara Headless API on WordPress.
+// The cart and checkout are no longer here: the shopper's bag is handed to WooCommerce's own cart and checkout on
+// shop.alaraline.co straight from their browser (src/lib/bag.ts), with no Cloudflare Worker in between.
 
 const WC = process.env.WC_URL ?? 'https://alaraline.co';
-const STORE = `${WC}/wp-json/wc/store/v1`;
-const CART = 'alara_cart', NONCE = 'alara_nonce', CUSTOMER = 'alara_customer';
+const CUSTOMER = 'alara_customer';
 const MONTH = 30 * 86400;
 
 export class CartError extends Error {
   constructor(message: string, public status = 400, public code = '') { super(message); }
 }
 
-/** Orders must never be placed on the live store from a test copy of the site by accident. */
-export function checkoutBlockedReason(): string | null {
-  const live = new URL(WC).hostname.endsWith('alaraline.co');
-  if (live && process.env.ALLOW_LIVE_CHECKOUT !== '1') {
-    return 'Test mode: this copy of the website is connected to the live ÀLara store, so placing orders is switched off. (Set ALLOW_LIVE_CHECKOUT=1 when the new site goes live.)';
-  }
-  return null;
-}
-
 const decode = (s: string) => s.replace(/&quot;/g, '"').replace(/&#0?39;|&#8217;/g, '’').replace(/&amp;/g, '&').replace(/<[^>]+>/g, '');
-
-export async function storeApi<T = RawCart>(path: string, init: { method?: string; json?: unknown } = {}): Promise<T> {
-  const jar = await cookies();
-  const method = init.method ?? 'GET';
-  const secure = process.env.NODE_ENV === 'production';
-  // this request's cart id + security nonce (updated as WooCommerce hands out new ones)
-  const ids = { token: jar.get(CART)?.value, nonce: jar.get(NONCE)?.value };
-
-  // Reads (GET) are retried on a temporary failure (dropped connection, 429, 5xx) with bounded exponential backoff
-  // that honours Retry-After. Changes (add, update, coupon, checkout…) are sent ONCE: if the connection drops after
-  // sending, WooCommerce may already have applied it, so the shopper is asked to check instead of us repeating it.
-  const send = async (m: string, p: string, json?: unknown) => {
-    const headers: Record<string, string> = { Accept: 'application/json' };
-    if (ids.token) headers['Cart-Token'] = ids.token;
-    if (ids.nonce) headers.Nonce = ids.nonce;
-    if (json !== undefined) headers['Content-Type'] = 'application/json';
-    // A 429 is Hostinger's traffic protection refusing the request before WordPress sees it: nothing was applied,
-    // so a bag change (add, quantity, remove, coupon…) may safely try once more. Placing the order never repeats.
-    const retries = m === 'GET' ? 2 : p === '/checkout' ? 0 : 1;
-    let res: Response | null = null;
-    for (let attempt = 0; ; attempt++) {
-      try {
-        res = await fetch(`${STORE}${p}`, { method: m, headers, body: json === undefined ? undefined : JSON.stringify(json), cache: 'no-store' });
-      } catch (e) {
-        res = null;
-        logWp('warn', `cart ${m} ${p}`, 0, null, { attempt, error: (e as Error).message.slice(0, 120) });
-      }
-      // reads: any temporary failure; changes: only a 429 (after a dropped connection or a 5xx it may have been applied)
-      const temporary = m === 'GET' ? !res || res.status === 429 || res.status >= 500 : res?.status === 429;
-      if (res?.status === 429) noteRateLimit(res);
-      if (!temporary || attempt >= retries) break;
-      const told = retryAfterMs(res);
-      if (told !== null && told > 2500) break; // too long to keep the shopper waiting
-      res?.body?.cancel().catch(() => {});
-      const base = m === 'GET' ? Math.min(2500, 300 * 2 ** attempt) : 1200;
-      await new Promise(r => setTimeout(r, (told ?? base) * (0.75 + Math.random() * 0.5)));
-    }
-    if (!res) {
-      if (m === 'GET') throw new CartError('The shop could not be reached. Please try again.', 503);
-      throw new CartError(p === '/checkout'
-        ? 'We could not confirm your order because the connection dropped. Please check your email or My Account before trying again, so you are not charged twice.'
-        : 'The connection dropped. Please check your bag before trying again.', 503, 'connection_lost');
-    }
-    // WooCommerce hands back (or renews) the cart id and the security nonce on every response
-    const newToken = res.headers.get('cart-token'), newNonce = res.headers.get('nonce');
-    if (newToken && newToken !== ids.token) { ids.token = newToken; jar.set(CART, newToken, { httpOnly: true, sameSite: 'lax', secure, path: '/', maxAge: MONTH }); }
-    if (newNonce && newNonce !== ids.nonce) { ids.nonce = newNonce; jar.set(NONCE, newNonce, { httpOnly: true, sameSite: 'lax', secure, path: '/', maxAge: MONTH }); }
-    return res;
-  };
-
-  // WooCommerce's answer as JSON. A PHP notice printed by a plugin before the JSON would break a plain
-  // res.json(), so anything before the first { or [ is skipped. Unreadable answers are logged by status, headers
-  // and length only: the body may hold the shopper's cart, address or phone, so it is never logged.
-  type Answer = (T & { code?: string; message?: string }) | null;
-  const read = async (r: Response, p: string): Promise<Answer> => {
-    const text = await r.text().catch(() => '');
-    try { return JSON.parse(text); } catch { /* try below */ }
-    const start = text.search(/[{[]/);
-    if (start > 0) { try { return JSON.parse(text.slice(start)); } catch { /* logged below */ } }
-    // (an error status is logged once below; an unreadable "OK" answer is the surprising case worth its own line)
-    if (r.ok) logWp('error', `cart ${method} ${p}`, r.status, r, { problem: 'unreadable JSON', bytes: text.length });
-    return null;
-  };
-
-  // changes need a nonce: get one first if this shopper has none yet, and once more if it expired. Re-sending after
-  // a 401 "invalid nonce" is safe: WooCommerce rejects the request before doing anything, so nothing is duplicated.
-  if (method !== 'GET' && !ids.nonce) await send('GET', '/cart');
-  let res = await send(method, path, init.json);
-  let data = await read(res, path);
-  if (method !== 'GET' && res.status === 401 && /nonce/i.test(data?.code ?? '')) {
-    await send('GET', '/cart');
-    res = await send(method, path, init.json);
-    data = await read(res, path);
-  }
-  if (!res.ok) {
-    // WooCommerce's error code only: its message can contain the shopper's email or address
-    logWp(res.status >= 500 || res.status === 429 ? 'error' : 'warn', `cart ${method} ${path}`, res.status, res, { code: data?.code ?? '' });
-    const fallback = res.status === 429
-      ? 'The shop is very busy right now. Please wait a minute and try again.'
-      : `The shop had a problem (error ${res.status}). Please try again.`;
-    throw new CartError(decode(data?.message ?? fallback), res.status, data?.code ?? '');
-  }
-  // the change went through but the answer was unreadable: read the cart again so the shopper sees the real result
-  if (data === null && path.startsWith('/cart')) data = await read(await send('GET', '/cart'), '/cart');
-  if (data === null) throw new CartError('The shop sent an unexpected answer. Please refresh the page.', 502);
-  return data as T;
-}
-
-/** Has this shopper started a cart? A visitor who never added anything has none, and their (empty) bag is
- *  shown without asking WordPress: most visitors only browse, so this spares the store most cart requests. */
-export async function hasCart() { return !!(await cookies()).get(CART)?.value; }
-
-export const EMPTY_CART: Cart = {
-  count: 0, items: [], coupons: [], fees: [], subtotal: 0, discount: 0, shipping: null, shippingLabel: 'Delivery', total: 0,
-  currency: 'US$', packaging: 'bag', payment: ['cod'],
-  billing: { first_name: '', last_name: '', company: '', address_1: '', address_2: '', city: '', state: '', postcode: '', country: 'LB', email: '', phone: '' },
-  errors: [],
-};
 
 /* ---------------------------------------------------------------- customer (signed-in shopper) */
 
@@ -161,72 +51,4 @@ export async function accountApi<T>(path: string, init: { method?: string; json?
   const data = await res.json().catch(() => null) as (T & { message?: string }) | null;
   if (!res.ok) throw new CartError(decode(data?.message ?? 'Something went wrong. Please try again.'), res.status);
   return data as T;
-}
-
-/* ---------------------------------------------------------------- shapes */
-
-type Money = { currency_minor_unit: number; currency_prefix: string };
-export type RawCart = {
-  items: {
-    key: string; id: number; quantity: number; name: string; permalink: string;
-    images: { thumbnail: string; src: string }[];
-    variation: { attribute: string; value: string }[];
-    item_data: { name?: string; key?: string; value: string }[];
-    prices: Money & { price: string; regular_price: string };
-    totals: Money & { line_total: string; line_subtotal: string };
-    quantity_limits: { maximum: number };
-  }[];
-  coupons: { code: string; totals: Money & { total_discount: string } }[];
-  fees: { key: string; name: string; totals: Money & { total: string } }[];
-  totals: Money & { total_items: string; total_discount: string; total_shipping: string | null; total_fees: string; total_price: string };
-  shipping_rates: { shipping_rates: { rate_id: string; name: string; price: string; selected: boolean }[] }[];
-  needs_shipping: boolean;
-  items_count: number;
-  payment_methods: string[];
-  billing_address: Record<string, string>;
-  shipping_address: Record<string, string>;
-  errors: { message: string }[];
-  extensions?: { alara?: { packaging?: string } };
-};
-
-export type Cart = {
-  count: number;
-  items: { key: string; id: number; quantity: number; max: number; name: string; slug: string; image: string; price: number; regular: number; lineTotal: number; details: { label: string; value: string }[] }[];
-  coupons: { code: string; discount: number }[];
-  fees: { name: string; amount: number }[];
-  subtotal: number; discount: number; shipping: number | null; shippingLabel: string; total: number; currency: string;
-  packaging: 'bag' | 'pr';
-  payment: string[];
-  billing: Record<string, string>;
-  errors: string[];
-};
-
-const amount = (v: string | null | undefined, m: Money) => (v == null ? 0 : Number(v) / 10 ** m.currency_minor_unit);
-
-export function toCart(c: RawCart): Cart {
-  const m = c.totals;
-  const rate = c.shipping_rates[0]?.shipping_rates.find(r => r.selected);
-  return {
-    count: c.items_count,
-    items: c.items.map(i => ({
-      key: i.key, id: i.id, quantity: i.quantity, max: i.quantity_limits?.maximum ?? 99, name: decode(i.name),
-      slug: (i.permalink.match(/\/product\/([^/]+)/) ?? [])[1] ?? '',
-      image: i.images[0]?.thumbnail || i.images[0]?.src || '',
-      price: amount(i.prices.price, i.prices), regular: amount(i.prices.regular_price, i.prices), lineTotal: amount(i.totals.line_subtotal, i.totals),
-      details: [
-        ...i.variation.map(v => ({ label: v.attribute, value: v.value })),
-        ...i.item_data.map(d => ({ label: decode(d.name ?? d.key ?? ''), value: decode(d.value) })),
-      ],
-    })),
-    coupons: c.coupons.map(x => ({ code: x.code, discount: amount(x.totals.total_discount, x.totals) })),
-    fees: c.fees.map(f => ({ name: decode(f.name), amount: amount(f.totals.total, f.totals) })),
-    subtotal: amount(m.total_items, m), discount: amount(m.total_discount, m),
-    shipping: m.total_shipping == null ? (rate ? amount(rate.price, m) : null) : amount(m.total_shipping, m),
-    shippingLabel: rate?.name ?? 'Delivery',
-    total: amount(m.total_price, m), currency: m.currency_prefix || 'US$',
-    packaging: c.extensions?.alara?.packaging === 'pr' ? 'pr' : 'bag',
-    payment: c.payment_methods,
-    billing: c.billing_address,
-    errors: (c.errors ?? []).map(e => decode(e.message)),
-  };
 }

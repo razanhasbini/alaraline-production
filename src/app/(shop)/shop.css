@@ -66,6 +66,13 @@
 .bag-view::after { content: ''; position: absolute; left: 50%; bottom: 0; width: 40px; height: 5px; margin-left: -20px; background: var(--pink);
   -webkit-mask: var(--squiggle) center / contain no-repeat; mask: var(--squiggle) center / contain no-repeat; transition: width .3s, margin .3s; }
 .bag-view:hover::after { width: 60px; margin-left: -30px; }
+/* Checkout / View cart are buttons now: they hand the bag to WooCommerce on shop.alaraline.co */
+button.bag-checkout { width: 100%; border: 0; font: inherit; letter-spacing: 1.4px; cursor: pointer; }
+button.bag-view { background: none; border: 0; font-family: inherit; cursor: pointer; }
+button.bag-checkout:disabled, button.bag-view:disabled { opacity: .7; cursor: progress; }
+.bag-waiting { margin: 16px 0 0; padding: 12px 14px; background: var(--wash, #fdecf4); font-size: 14px; line-height: 1.5; color: #000; }
+.bag-note { margin: 14px 0 16px; font-size: 13px; line-height: 1.5; color: #777; }
+.cart-empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 
 /* ---------- "added to cart!" note ---------- */
 .added { position: fixed; right: 24px; bottom: 24px; z-index: 92; width: min(340px, calc(100% - 32px)); padding: 20px; background: #fff;

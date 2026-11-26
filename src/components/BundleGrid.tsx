@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import type { Bundle } from '@/lib/alara';
 import BundlePhotos from './BundlePhotos';
@@ -12,14 +11,15 @@ const money = (symbol: string, value: string) => `${symbol}${Number(value).toFix
 
 // Same look as the live "ÀLara Christmas Bundles" section: photo opens the details, rectangular burgundy
 // "Add to cart". Bundles that need scents open the details first; the others go straight into the cart.
-// The cart is WooCommerce's: it checks the scents, price, stock and adds the PR box fee itself.
+// The bundle goes into the bag (src/lib/bag.ts); WooCommerce checks the scents, price and stock and adds the PR box
+// fee itself when the bag reaches its cart.
 export default function BundleGrid({ items, symbol, prBoxPrice }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
-  const { call, busy } = useCart();
+  const { addBundle, busy } = useCart();
   const [notice, setNotice] = useState<{ slot: number; text: string; ok: boolean } | null>(null);
-  const quickAdd = async (b: Bundle) => {
-    const d = await call({ action: 'bundle', slot: b.slot, choices: {} });
-    setNotice({ slot: b.slot, ok: d.ok, text: d.ok ? 'Added to cart ✓' : d.message ?? 'Could not add this bundle.' });
+  const quickAdd = (b: Bundle) => {
+    addBundle(bundleLine(b, {}));
+    setNotice({ slot: b.slot, ok: true, text: 'Added to cart ✓' });
   };
   const [open, setOpen] = useState<Bundle | null>(null);
   const show = (b: Bundle) => { setOpen(b); dialog.current?.showModal(); };
@@ -51,6 +51,16 @@ export default function BundleGrid({ items, symbol, prBoxPrice }: Props) {
   );
 }
 
+/** A bundle as a line of the bag; its price is shown only when it doesn't depend on the scents. */
+function bundleLine(b: Bundle, choices: Record<string, string>, pr = false) {
+  const fixed = !b.max_price || Number(b.max_price) === Number(b.price);
+  return {
+    id: b.id, slot: b.slot, choices, name: b.name, image: b.image?.src ?? '', slug: b.slug, pr,
+    price: fixed ? Number(b.price) : null,
+    details: b.choices.filter(c => choices[c.key]).map(c => ({ label: c.label, value: choices[c.key] })),
+  };
+}
+
 function BundlePrice({ b, symbol }: { b: Bundle; symbol: string }) {
   return (
     <div className="xb-price">
@@ -63,9 +73,8 @@ function BundlePrice({ b, symbol }: { b: Bundle; symbol: string }) {
 }
 
 function BundleDetails({ b, symbol, prBoxPrice, onClose }: { b: Bundle; symbol: string; prBoxPrice: number | null; onClose: () => void }) {
-  const { call, busy, cart } = useCart();
-  const router = useRouter();
-  const [pr, setPr] = useState(cart?.packaging === 'pr');
+  const { addBundle, go, busy } = useCart();
+  const [pr, setPr] = useState(false);
   const [status, setStatus] = useState<{ ok: boolean; text: string } | null>(null);
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -73,11 +82,8 @@ function BundleDetails({ b, symbol, prBoxPrice, onClose }: { b: Bundle; symbol: 
     const next = ((e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null)?.value ?? 'cart';
     if (!form.reportValidity()) return;
     const choices = Object.fromEntries(b.choices.map(c => [c.key, String(new FormData(form).get(`choices[${c.key}]`) ?? '')]));
-    setStatus({ ok: true, text: 'Adding to cart…' });
-    if (prBoxPrice !== null && (pr ? 'pr' : 'bag') !== cart?.packaging) await call({ action: 'packaging', selection: pr ? 'pr' : 'bag' });
-    const d = await call({ action: 'bundle', slot: b.slot, choices });
-    if (!d.ok) { setStatus({ ok: false, text: d.message ?? 'Could not add this bundle.' }); return; }
-    if (next === 'checkout') { onClose(); router.push('/checkout'); return; }
+    addBundle({ ...bundleLine(b, choices, prBoxPrice !== null && pr), silent: next === 'checkout' });
+    if (next === 'checkout') { setStatus({ ok: true, text: 'Opening checkout…' }); go('checkout'); return; }
     setStatus({ ok: true, text: 'Added to cart ✓' });
   };
   return (

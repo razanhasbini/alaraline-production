@@ -36,7 +36,7 @@ const price = (p: LeanProduct) => (
 
 export function Buy({ p }: { p: LeanProduct }) {
   const { add, busy } = useCart();
-  if (p.type === 'simple' && p.purchasable && p.inStock) return <button type="button" className="btn btn-black" disabled={busy} onClick={() => add(p.id, { name: p.name, image: p.image })}>Add to cart</button>;
+  if (p.type === 'simple' && p.purchasable && p.inStock) return <button type="button" className="btn btn-black" disabled={busy} onClick={() => add(p.id, { name: p.name, image: p.image, slug: p.slug, price: p.price })}>Add to cart</button>;
   return <Link className="btn btn-black" href={`/product/${p.slug}`}>{p.inStock ? 'Select options' : 'Read more'}</Link>;
 }
 

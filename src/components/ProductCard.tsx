@@ -34,7 +34,7 @@ export default function ProductCard({ product: p, priority = false }: { product:
           {alt && <Image className="card-img-alt" src={wpImage(alt.src, 640)} {...srcSetOf(alt.src, 640)} alt="" fill sizes={sizes} loading="lazy" />}
         </Link>
         {b.length > 0 && <div className="badges">{b.map(x => <span key={x.label} className={`badge ${x.cls}`}>{x.label}</span>)}</div>}
-        <CardActions id={p.id} name={p.name} slug={p.slug} image={img?.src ?? ''} quickAdd={simple && p.purchasable && p.inStock} inStock={p.inStock} />
+        <CardActions id={p.id} name={p.name} slug={p.slug} price={p.price} image={img?.src ?? ''} quickAdd={simple && p.purchasable && p.inStock} inStock={p.inStock} />
       </div>
       <Price product={p} />
       <h3 className="card-title"><Link href={href}>{p.name}</Link></h3>

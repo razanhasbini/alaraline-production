@@ -7,7 +7,7 @@ import { useCart } from './CartProvider';
 import { useCompare, useWishlist } from './Wishlist';
 
 /** The hover icons (wishlist, compare, quick view) and the black ADD TO CART bar of a product card. */
-export default function CardActions({ id, name, slug, image, quickAdd, inStock }: { id: number; name: string; slug: string; image: string; quickAdd: boolean; inStock: boolean }) {
+export default function CardActions({ id, name, slug, price, image, quickAdd, inStock }: { id: number; name: string; slug: string; price: number; image: string; quickAdd: boolean; inStock: boolean }) {
   const { add, busy } = useCart();
   const wish = useWishlist(), cmp = useCompare();
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function CardActions({ id, name, slug, image, quickAdd, inStock }
         <Link href={href} aria-label={`Quick view ${name}`}><EyeIcon /></Link>
       </div>
       {quickAdd
-        ? <button type="button" className="card-cta" disabled={busy} onClick={() => add(id, { name, image })} aria-label={`Add to cart: “${name}”`}>Add to cart</button>
+        ? <button type="button" className="card-cta" disabled={busy} onClick={() => add(id, { name, image, slug, price })} aria-label={`Add to cart: “${name}”`}>Add to cart</button>
         : <Link className="card-cta" href={href}>{inStock ? 'Select options' : 'Read more'}</Link>}
     </>
   );

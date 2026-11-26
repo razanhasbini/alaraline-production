@@ -90,7 +90,7 @@ async function ProductDetails({ params }: Pick<PageProps<'/product/[slug]'>, 'pa
           <p className="pdp-rating"><span aria-hidden="true">★★★★★</span><span className="sr-only">Rated {p.rating} out of 5</span> <i>|</i> <a href="#reviews">{p.reviewCount} {p.reviewCount === 1 ? 'review' : 'reviews'}</a></p>
           {/* Text written by the ÀLara team in wp-admin, rendered as WordPress renders it. */}
           {p.shortDescription && <div className="pdp-short" dangerouslySetInnerHTML={{ __html: p.shortDescription }} />}
-          <BuyBox id={p.id} name={p.name} image={p.images[0]?.src ?? ''} type={p.type} inStock={p.inStock} purchasable={p.purchasable} attributes={p.attributes} variations={p.variations} />
+          <BuyBox id={p.id} name={p.name} slug={p.slug} image={p.images[0]?.src ?? ''} price={p.price} type={p.type} inStock={p.inStock} purchasable={p.purchasable} attributes={p.attributes} variations={p.variations} />
           <dl className="pdp-meta">
             {(p.sku || p.type === 'variable') && <><dt>Sku:</dt><dd>{p.sku || 'N/A'}</dd></>}
             {p.categories.length > 0 && <>
